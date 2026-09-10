@@ -37,6 +37,15 @@ def write_json(path, data):
     tmp.replace(path)
 
 
+def wait_until_idle(required):
+    while True:
+        raw, others = processes()
+        if not required or not others:
+            return raw
+        print(json.dumps(dict(event='waiting_for_idle_gpu', other_compute_pids=others)), flush=True)
+        time.sleep(5)
+
+
 def checkpoint(dest, description, push):
     subprocess.run([sys.executable, 'scripts/report_longbench.py', '--output', str(dest)], check=True)
     if push:
@@ -94,9 +103,7 @@ def main():
         write_json(protocol_path, protocol)
         write_json(dest/'data_manifest.json', manifest)
     protocol_hash = sha(protocol_path)
-    raw, others = processes()
-    if args.require_idle and others:
-        raise RuntimeError(f'Other CUDA processes: {others}')
+    raw = wait_until_idle(args.require_idle)
     torch.manual_seed(42)
     model, tokenizer = load_model()
     if args.mlp_chunk_size:
@@ -130,9 +137,7 @@ def main():
                 pending = [m for m in methods if row['id'] not in done[m['name']]]
                 if not pending:
                     continue
-                _, others = processes()
-                if args.require_idle and others:
-                    raise RuntimeError(f'Other CUDA processes: {others}')
+                wait_until_idle(args.require_idle)
                 ids = torch.tensor([row['input_ids']], device='cuda')
                 n = ids.shape[1]
                 groups = defaultdict(list)
