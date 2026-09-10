@@ -1,8 +1,8 @@
-# Full LongBench evaluation
+# LongBench validation subset
 
 Status: complete. 3 tasks, 3 examples per method, 11 methods.
 
-All original test examples are evaluated once with greedy decoding. Task scores use the pinned LongBench author metrics and prescribed generation lengths. Aggregate scores are equal-weight means of task scores. The English/code aggregate covers the 16 tasks excluding the five Chinese tasks. No full-benchmark score is emitted before every requested example is present.
+This subset checks the evaluation pipeline and is not a full-benchmark quality estimate. Task scores use the pinned LongBench author metrics and prescribed generation lengths. Aggregate scores are equal-weight means of task scores. The English/code aggregate excludes Chinese tasks (16 tasks in the full benchmark). No full-benchmark score is emitted before every requested example is present.
 
 Context limit: 32,768 tokens including the reserved answer budget. Official task templates use Qwen chat wrapping except the six official no-chat tasks. Middle truncation is applied at token level after wrapping, as in the earlier pilot. The pilot used an 8,192-token prompt cap; its scores are not directly comparable.
 

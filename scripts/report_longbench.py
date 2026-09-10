@@ -53,6 +53,9 @@ def main():
                                        macro_excluding_tuned=statistics.mean(v for v in untuned_scores.values() if v is not None)
                                        if complete else None)
     report['complete'] = all(r['complete'] for r in report['methods'].values())
+    full_scope=(protocol['limit'] is None and len(tasks)==21 and set(tasks)==set(manifest['tasks']))
+    report['full_benchmark_complete']=report['complete'] and full_scope
+    report['scope']='full benchmark' if full_scope else 'validation subset'
     pairs = []
     for budget in (256, 1024):
         for label in ('d01_r0', 'd0.1_w128_r0', 'd0.1_w128_r64'):
@@ -76,12 +79,15 @@ def main():
         report['comparisons'][a+' minus '+b] = dict(macro_difference=statistics.mean(differences),
                                                   paired_stratified_bootstrap_95ci=np.quantile(replicates, [.025, .975]).tolist())
     (root/'SUMMARY.json').write_text(json.dumps(report, indent=2)+'\n')
-    lines = ['# Full LongBench evaluation', '',
+    title='Full LongBench evaluation' if full_scope else 'LongBench validation subset'
+    lines = ['# '+title, '',
              f"Status: {'complete' if report['complete'] else 'in progress'}. "
              f"{len(tasks)} tasks, {report['expected_per_method']} examples per method, {len(protocol['methods'])} methods.", '',
-             'All original test examples are evaluated once with greedy decoding. Task scores use the pinned '
+             ('All original test examples are evaluated once with greedy decoding. ' if full_scope else
+              'This subset checks the evaluation pipeline and is not a full-benchmark quality estimate. ')+
+             'Task scores use the pinned '
              'LongBench author metrics and prescribed generation lengths. Aggregate scores are equal-weight means '
-             'of task scores. The English/code aggregate covers the 16 tasks excluding the five Chinese tasks. '
+             'of task scores. The English/code aggregate excludes Chinese tasks (16 tasks in the full benchmark). '
              'No full-benchmark score is emitted before every requested example is present.', '',
              f"Context limit: {manifest['context_limit']:,} tokens including the reserved answer budget. "
              'Official task templates use Qwen chat wrapping except the six official no-chat tasks. '

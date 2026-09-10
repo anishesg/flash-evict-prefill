@@ -252,5 +252,7 @@
       ]
     }
   },
-  "complete": true
+  "complete": true,
+  "full_benchmark_complete": false,
+  "scope": "validation subset"
 }

@@ -203,7 +203,8 @@ def main():
                     checkpoint(dest, f'LongBench {task} checkpoint {index+1}/{len(rows)}', False)
             checkpoint(dest, f'complete LongBench {task} across {len(methods)} policies', args.push)
         write_json(dest/'complete.json', dict(completed_unix=time.time(), protocol_sha256=protocol_hash))
-        checkpoint(dest, 'complete full LongBench quality sweep and ablations', args.push)
+        description='complete full LongBench quality sweep and ablations' if args.tasks is None and args.limit is None else 'complete LongBench validation subset'
+        checkpoint(dest, description, args.push)
     except BaseException as error:
         write_json(dest/'failure.json', dict(time=time.time(), error=repr(error)))
         raise

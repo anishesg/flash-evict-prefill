@@ -39,6 +39,8 @@ def test_task_macro_and_paired_interval(tmp_path):
     assert result.returncode == 0, result.stderr
     summary = json.loads((tmp_path/'SUMMARY.json').read_text())
     assert summary['complete']
+    assert not summary['full_benchmark_complete']
+    assert summary['scope'] == 'validation subset'
     assert summary['methods']['d01_r0_256']['macro_all'] == 50
     assert summary['methods']['d01_r0_256']['macro_excluding_tuned'] == 40
     paired = summary['comparisons']['d01_r0_256 minus snap_256']
