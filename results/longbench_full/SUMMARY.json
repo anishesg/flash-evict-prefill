@@ -26,9 +26,9 @@
   "methods": {
     "full": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -57,9 +57,9 @@
     },
     "snap_256": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -88,9 +88,9 @@
     },
     "d01_r0_256": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -119,9 +119,9 @@
     },
     "d0.1_w128_r0_256": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -150,9 +150,9 @@
     },
     "d0.1_w128_r64_256": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -181,9 +181,9 @@
     },
     "snap_1024": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -212,9 +212,9 @@
     },
     "d01_r0_1024": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -243,9 +243,9 @@
     },
     "d0.1_w128_r0_1024": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -274,9 +274,9 @@
     },
     "d0.1_w128_r64_1024": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -305,9 +305,9 @@
     },
     "value_norm_only_256": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,
@@ -336,9 +336,9 @@
     },
     "uniform_recent_256": {
       "complete": false,
-      "records": 0,
+      "records": 50,
       "counts": {
-        "narrativeqa": 0,
+        "narrativeqa": 50,
         "qasper": 0,
         "multifieldqa_en": 0,
         "multifieldqa_zh": 0,

@@ -1,7 +1,7 @@
 {
-  "phase": "scripts/benchmark_model.py",
-  "updated_unix": 1789076682.3401818,
+  "phase": "scripts/evaluate_longbench.py",
+  "updated_unix": 1789077221.3369765,
   "driver_pid": 6641,
-  "child_pid": 6663,
-  "log": "results/model_benchmark_expandable.log"
+  "child_pid": 7319,
+  "log": "results/longbench_full.log"
 }

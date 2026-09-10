@@ -12,17 +12,17 @@ Compatible methods share prefill, and compatible caches batch decoding. MLP chun
 
 | Method | Records | All-task macro | English/code macro | Macro excluding tuning prompts |
 |---|---:|---:|---:|---:|
-| full | 0/4750 | pending | pending | pending |
-| snap_256 | 0/4750 | pending | pending | pending |
-| d01_r0_256 | 0/4750 | pending | pending | pending |
-| d0.1_w128_r0_256 | 0/4750 | pending | pending | pending |
-| d0.1_w128_r64_256 | 0/4750 | pending | pending | pending |
-| snap_1024 | 0/4750 | pending | pending | pending |
-| d01_r0_1024 | 0/4750 | pending | pending | pending |
-| d0.1_w128_r0_1024 | 0/4750 | pending | pending | pending |
-| d0.1_w128_r64_1024 | 0/4750 | pending | pending | pending |
-| value_norm_only_256 | 0/4750 | pending | pending | pending |
-| uniform_recent_256 | 0/4750 | pending | pending | pending |
+| full | 50/4750 | pending | pending | pending |
+| snap_256 | 50/4750 | pending | pending | pending |
+| d01_r0_256 | 50/4750 | pending | pending | pending |
+| d0.1_w128_r0_256 | 50/4750 | pending | pending | pending |
+| d0.1_w128_r64_256 | 50/4750 | pending | pending | pending |
+| snap_1024 | 50/4750 | pending | pending | pending |
+| d01_r0_1024 | 50/4750 | pending | pending | pending |
+| d0.1_w128_r0_1024 | 50/4750 | pending | pending | pending |
+| d0.1_w128_r64_1024 | 50/4750 | pending | pending | pending |
+| value_norm_only_256 | 50/4750 | pending | pending | pending |
+| uniform_recent_256 | 50/4750 | pending | pending | pending |
 
 ## Per-task quality
 

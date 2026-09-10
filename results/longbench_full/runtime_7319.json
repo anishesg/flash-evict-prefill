@@ -1,0 +1,8 @@
+{
+  "started_unix": 1789077228.8938038,
+  "pid": 7319,
+  "torch": "2.14.0+cu130",
+  "gpu": "NVIDIA A10G",
+  "git_revision": "c4bd36e602127e797f6e95f21f802060be56b07f",
+  "compute_processes_before": ""
+}
