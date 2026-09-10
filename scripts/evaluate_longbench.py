@@ -102,6 +102,7 @@ def main():
     else:
         write_json(protocol_path, protocol)
         write_json(dest/'data_manifest.json', manifest)
+        checkpoint(dest, 'freeze LongBench inputs, methods, and evaluation coverage before prediction', args.push)
     protocol_hash = sha(protocol_path)
     raw = wait_until_idle(args.require_idle)
     torch.manual_seed(42)
