@@ -1,0 +1,126 @@
+{
+  "data_manifest_sha256": "32f4f10493c7af292c1879cbb1bf8a8808e617960da7385fe16fbfb1a2546f58",
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "model_revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+  "methods": [
+    {
+      "name": "full",
+      "backend": "full",
+      "budget": null
+    },
+    {
+      "name": "snap_256",
+      "backend": "snap",
+      "budget": 256
+    },
+    {
+      "name": "d01_r0_256",
+      "backend": "fused",
+      "budget": 256,
+      "recency_decay": 0.1,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 0
+    },
+    {
+      "name": "d0.1_w128_r0_256",
+      "backend": "fused",
+      "budget": 256,
+      "recency_decay": 0.1,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 0
+    },
+    {
+      "name": "d0.1_w128_r64_256",
+      "backend": "fused",
+      "budget": 256,
+      "recency_decay": 0.1,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 64
+    },
+    {
+      "name": "snap_1024",
+      "backend": "snap",
+      "budget": 1024
+    },
+    {
+      "name": "d01_r0_1024",
+      "backend": "fused",
+      "budget": 1024,
+      "recency_decay": 0.1,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 0
+    },
+    {
+      "name": "d0.1_w128_r0_1024",
+      "backend": "fused",
+      "budget": 1024,
+      "recency_decay": 0.1,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 0
+    },
+    {
+      "name": "d0.1_w128_r64_1024",
+      "backend": "fused",
+      "budget": 1024,
+      "recency_decay": 0.1,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 64
+    },
+    {
+      "name": "value_norm_only_256",
+      "backend": "value_norm_only",
+      "budget": 256
+    },
+    {
+      "name": "uniform_recent_256",
+      "backend": "uniform_recent",
+      "budget": 256
+    }
+  ],
+  "tasks": [
+    "narrativeqa",
+    "qasper",
+    "multifieldqa_en",
+    "multifieldqa_zh",
+    "hotpotqa",
+    "2wikimqa",
+    "musique",
+    "dureader",
+    "gov_report",
+    "qmsum",
+    "multi_news",
+    "vcsum",
+    "trec",
+    "triviaqa",
+    "samsum",
+    "lsht",
+    "passage_count",
+    "passage_retrieval_en",
+    "passage_retrieval_zh",
+    "lcc",
+    "repobench-p"
+  ],
+  "limit": null,
+  "source_sha256": {
+    "/home/qcb/flash-evict/scripts/evaluate_longbench.py": "6e3952ca57dc007b6a71d5a96d2c291ef8f79a54765b1ee79a2f22330f1693f0",
+    "flash_evict/quality_adapter.py": "fb1f2ad6bf4a1dccac0a28d4504cbc639a0c60270dd2e5fe71ecb96f2838e3eb",
+    "flash_evict/prefill.py": "dc36a5cd82ddcf986858e4ad7779290387278c263a5410de7d1cc896c0149f0b",
+    "flash_evict/baselines.py": "2c932ffc3e08909b9367b094b9885202f93c72b19e521336e4456ebe485d406f",
+    "flash_evict/streaming_adapter.py": "b98d58c2ba51f29fd6526344f0bb550de531ed82697b83aae017878e34b7cdd4",
+    "/home/qcb/kv-distill/kv_distill/attention.py": "c8e8e64d10f97ace751e0e1643f560509e50abafd5fec62cfa2d7b25d6cfae5f",
+    "/home/qcb/kv-distill/kv_distill/engine.py": "b9f0bd8be6cad69399663d8146f0fc7731190bd3987d6156b67a5415a7d6b54a"
+  },
+  "seed": 42,
+  "mlp_chunk_size": 1024,
+  "decode_batch_size": 6,
+  "generation": "Greedy, official per-task max_new_tokens and Samsum newline stop; model generation EOS IDs",
+  "compression": "Compress prefix excluding final prompt token, then forward final prompt token and decode; absolute RoPE positions; budget per KV head in every layer; decode cache grows; reserved suffix counts inside budget; uniform_recent is a pure suffix without sink tokens",
+  "ablation_reference": "recency_scores_only is the existing d01_r0_256 method (including value weighting)",
+  "timing": "Quality runs share prefill among compatible policies and batch decode; shared timings and bank-inclusive allocator peaks are not standalone method latency or memory"
+}
