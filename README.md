@@ -89,7 +89,7 @@ PYTHONPATH=.:/home/qcb/kv-distill /home/qcb/kv-distill/.venv/bin/python -m pytes
 ```bash
 PYTHONPATH=. /home/qcb/kv-distill/.venv/bin/python scripts/benchmark.py
 PYTHONPATH=. /home/qcb/kv-distill/.venv/bin/python scripts/benchmark.py \
-    --heads 28 --kv-heads 4 --dim 128 --output results/benchmark_qwen.json
+    --heads 28 --kv-heads 4 --dim 128 --require-idle --output results/benchmark_qwen.json
 PYTHONPATH=.:/home/qcb/kv-distill /home/qcb/kv-distill/.venv/bin/python scripts/evaluate.py
 /home/qcb/kv-distill/.venv/bin/python scripts/report.py
 /home/qcb/kv-distill/.venv/bin/python scripts/plot_quality.py
@@ -98,6 +98,13 @@ PYTHONPATH=.:/home/qcb/kv-distill /home/qcb/kv-distill/.venv/bin/python scripts/
 See [the experimental report](results/REPORT.md) and raw JSON results. GPU
 sharing affected initial measurements; process lists and free-memory readings
 are retained, and these timings must not be presented as exclusive-device results.
+The final `benchmark_qwen.json` sweep observed no other CUDA processes before or
+after any measurement. At 128K tokens (one layer, BF16, B=1, Hq=28, Hkv=4,
+D=128, 10% retention), fused replay plus top-k takes 5508.32 ms and 901.23 MiB
+of additional allocations; FlashAttention plus SnapKV with w=32 takes 2151.77 ms
+and 2705.00 MiB. Outputs and selection are included; inputs and model weights
+are excluded. Triton reports zero spills and zero global scratch.
+
 Qwen evaluation uses the existing frozen pilot data, model revision, baseline
 cache lifecycle, and metrics. The default selects a small, explicitly frozen
 19-prompt exploratory subset; `--full-pilot` in a new output directory runs all
@@ -108,8 +115,8 @@ repetitions). All 57 uncompressed fused controls and all 285 repeated historical
 baseline conditions reproduce the reference token sequences. Three repeated
 greedy seeds do not provide independent quality samples. At budget 1024, fused
 versus SnapKV scores are 25.00 versus 92.65 on four LongBench prompts, and 11.11%
-versus 100% exact match on nine needle prompts. The compressed policy, rather
-than the uncompressed prefill replacement, is responsible for this observed gap.
+versus 100% exact match on nine needle prompts. Quality declines after this
+policy is applied; full-cache controls preserve reference generation.
 
 The adapter is optional and leaves `/home/qcb/kv-distill` unchanged. It accepts
 only that evaluator's unpadded, single-prompt, contiguous-position prefill flow;

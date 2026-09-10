@@ -4,6 +4,8 @@ Completed 627 conditions: 19 prompts × 11 methods × 3 greedy repetitions.
 
 At a 1,024-token initial budget, fused scoring obtains 25.00 versus SnapKV 92.65 on LongBench, and 11.11% versus 100.00% needle exact match. These are exploratory pilot results, not full-benchmark estimates.
 
+Clean A10G benchmark at 131,072 tokens and Qwen head dimensions (one layer): fused replay + top-k takes 5508.32 ms and 901.23 MiB of additional allocations, versus 2151.77 ms and 2705.00 MiB for FlashAttention + SnapKV with w=32. Outputs and selection are included; input Q/K/V and model weights are excluded.
+
 Exact tiled replay preserves linear memory but recomputes QK. This is not a single-traversal or zero-overhead implementation.
 Dense attention still uses quadratic arithmetic. No novelty or quality-superiority claim follows from correctness alone.
 
@@ -72,7 +74,7 @@ Sweep complete; external activity observed or not excluded.
 ### benchmark_qwen.json
 
 BF16, B=1, Hq=28, Hkv=4, D=128, retention=10%.
-Sweep incomplete; no other CUDA processes observed before/after any measurement.
+Sweep complete; no other CUDA processes observed before/after any measurement.
 
 | Tokens | Method | Median ms | Peak additional MiB |
 |---:|---|---:|---:|
@@ -89,8 +91,10 @@ Sweep incomplete; no other CUDA processes observed before/after any measurement.
 | 32768 | torch_flash | 126.597 | 227.501 |
 | 32768 | triton_attention_only | 164.212 | 224.000 |
 | 131072 | flash_snap_w128 | 2182.679 | 5393.001 |
+| 131072 | flash_snap_w32 | 2151.771 | 2705.000 |
 | 131072 | fused_replay_scores | 5483.252 | 898.000 |
 | 131072 | fused_replay_topk | 5508.316 | 901.232 |
+| 131072 | torch_flash | 2134.822 | 910.001 |
 | 131072 | triton_attention_only | 2770.222 | 896.000 |
 
 Triton resources: maximum 167 registers/thread, 45056 shared bytes/program, 0 reported spills, and 0 global scratch bytes.
@@ -170,7 +174,7 @@ Fused retention is pure top-k with no reserved recent tokens. Fused and SnapKV c
 | needle | snap_1024 | 100.00 ± 0.00 | 27 | 0.256 | 56.00 |
 | needle | snap_256 | 100.00 ± 0.00 | 27 | 0.246 | 14.00 |
 
-Prefill wall times in raw quality records include all model layers. Baseline prefill includes the existing evaluator’s scoring diagnostics; they must not be used for an end-to-end speedup claim. Use the kernel benchmarks for latency comparisons.
+Prefill wall times in raw quality records include all model layers. Baseline prefill includes scoring diagnostics, and first-use fused prefill can include JIT compilation; these timings must not be used for an end-to-end speedup claim. Decode duration depends on generated output length. Use the warmed kernel benchmarks for latency comparisons.
 
 Full-cache control: 57 / 57 paired generations have identical token IDs. Finite-precision kernel changes can alter greedy output; controls are retained in the summary JSON.
 

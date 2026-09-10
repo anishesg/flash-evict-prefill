@@ -75,7 +75,7 @@ def main():
                      'quality_seed_std':statistics.stdev(quality) if len(quality)>1 else 0.,'per_seed':values}
             summaries.append(summary)
             lines.append(f'| {suite} | {method} | {summary["quality_mean"]:.2f} ± {summary["quality_seed_std"]:.2f} | {sum(v["examples"] for v in values)} | {statistics.mean(v["decode_seconds"] for v in values):.3f} | {statistics.mean(v["initial_kv_bytes"] for v in values)/2**20:.2f} |')
-        lines+=['','Prefill wall times in raw quality records include all model layers. Baseline prefill includes the existing evaluator’s scoring diagnostics; they must not be used for an end-to-end speedup claim. Use the kernel benchmarks for latency comparisons.','']
+        lines+=['','Prefill wall times in raw quality records include all model layers. Baseline prefill includes scoring diagnostics, and first-use fused prefill can include JIT compilation; these timings must not be used for an end-to-end speedup claim. Decode duration depends on generated output length. Use the warmed kernel benchmarks for latency comparisons.','']
         paired={(r['id'],r['seed'],r['method']):r for r in rows}
         controls=[]
         for (rid,seed,method),r in paired.items():
