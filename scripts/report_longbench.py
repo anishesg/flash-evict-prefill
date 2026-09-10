@@ -85,7 +85,8 @@ def main():
              'Budgets count retained prompt tokens per KV head in all 28 layers. The final prompt token is '
              'forwarded after prefix compaction; the decode cache then grows. Recency attention includes value '
              'weighting. The value-only control uses L1 value magnitude; the suffix control retains only the '
-             'most recent budget tokens and has no attention sinks.', '',
+             'most recent budget tokens and has no attention sinks. SnapKV uses w=32, average-pool kernel 5, '
+             'and 32 reserved recent tokens inside the budget, matching the pilot implementation.', '',
              'Compatible methods share prefill, and compatible caches batch decoding. MLP chunks of '
              f"{protocol['mlp_chunk_size']} tokens apply to every method. Quality-run timings and peaks include "
              'shared work and live policy banks; use the separate whole-model benchmark for performance comparisons.', '',
