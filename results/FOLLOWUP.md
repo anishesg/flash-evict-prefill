@@ -1,6 +1,6 @@
 # Query recency and observation-window follow-up
 
-Requested performance tables: in progress. The larger historical exploratory grid remains partial.
+Requested performance tables: complete. The larger historical exploratory grid remains partial.
 
 The separate full 21-task evaluation is documented in [LONGBENCH_PLAN.md](LONGBENCH_PLAN.md); its coverage and scores are written to `longbench_full/SUMMARY.md` as the campaign runs. The quality tables below retain the earlier adaptive pilot.
 
@@ -76,6 +76,21 @@ The MLP chunk size is shared by every method within a configuration; zero means 
 | 131072 | d01_r0 | 1024 | 0 | OOM | — | — |
 | 131072 | d0.1_w128_r0 | 1024 | 0 | OOM | — | — |
 | 131072 | d0.1_w128_r64 | 1024 | 0 | OOM | — | — |
+| 8192 | full | — | 1024 | 2.185 | 15.498 | 0.825 |
+| 8192 | snap_1024 | 1024 | 1024 | 2.213 | 15.129 | 0.456 |
+| 8192 | d01_r0 | 1024 | 1024 | 2.507 | 15.129 | 0.456 |
+| 8192 | d0.1_w128_r0 | 1024 | 1024 | 2.273 | 15.129 | 0.456 |
+| 8192 | d0.1_w128_r64 | 1024 | 1024 | 2.273 | 15.129 | 0.456 |
+| 32768 | full | — | 1024 | 11.438 | 17.971 | 3.297 |
+| 32768 | snap_1024 | 1024 | 1024 | 11.570 | 16.336 | 1.662 |
+| 32768 | d01_r0 | 1024 | 1024 | 16.871 | 16.336 | 1.662 |
+| 32768 | d0.1_w128_r0 | 1024 | 1024 | 12.653 | 16.336 | 1.662 |
+| 32768 | d0.1_w128_r64 | 1024 | 1024 | 12.719 | 16.336 | 1.662 |
+| 131072 | full | — | 1024 | OOM | — | — |
+| 131072 | snap_1024 | 1024 | 1024 | OOM | — | — |
+| 131072 | d01_r0 | 1024 | 1024 | OOM | — | — |
+| 131072 | d0.1_w128_r0 | 1024 | 1024 | OOM | — | — |
+| 131072 | d0.1_w128_r64 | 1024 | 1024 | OOM | — | — |
 
 ## Interpretation
 
