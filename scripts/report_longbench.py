@@ -101,7 +101,8 @@ def main():
         lines.append('| '+task+' | '+' | '.join(fmt(r['completed_task_scores'].get(task))
                                                 for r in report['methods'].values())+' |')
     lines += ['', '## Paired comparisons', '',
-              'Intervals use 2,000 paired bootstrap resamples within each task, with tasks held fixed. '
+              'Pointwise intervals (without a multiple-comparison adjustment) use 2,000 paired bootstrap resamples '
+              'within each task, with tasks held fixed. '
               'They measure example variability, not variability across new tasks or model training seeds.', '']
     for pair, result in report['comparisons'].items():
         lo, hi = result['paired_stratified_bootstrap_95ci']
