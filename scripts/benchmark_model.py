@@ -19,6 +19,14 @@ from flash_evict.streaming_adapter import StreamingController, chunk_mlp
 from benchmark_policies import processes
 
 
+def wait_idle():
+    while True:
+        raw,others=processes()
+        if not others:return raw
+        print(json.dumps(dict(event='waiting_for_idle_gpu',other_compute_pids=others)),flush=True)
+        time.sleep(5)
+
+
 @torch.inference_mode()
 def measure(model,ctl,ids,repeats):
     n=ids.shape[1];pos=torch.arange(n,device='cuda')[None]
@@ -70,7 +78,7 @@ def main():
                             reserved_recent=policy['reserved_recent'],pool_kernel=policy['pool_kernel']))
     torch.manual_seed(20260910)
     raw,others=processes()
-    if args.require_idle and others:raise RuntimeError(f'Other CUDA processes: {others}')
+    if args.require_idle and others:raw=wait_idle()
     model,_=load_model()
     if args.mlp_chunk_size:chunk_mlp(model,args.mlp_chunk_size)
     paths=[Path(__file__),Path('flash_evict/streaming_adapter.py'),Path('flash_evict/prefill.py'),
@@ -94,7 +102,7 @@ def main():
             if (n,name) in done:continue
             ctl=StreamingController(model,budget=args.budget,**kwargs)
             before,others=processes()
-            if args.require_idle and others:raise RuntimeError(f'Other CUDA processes: {others}')
+            if args.require_idle and others:before=wait_idle();others=[]
             try:
                 row=dict(n=n,method=name,budget=None if name=='full' else args.budget,**measure(model,ctl,ids,args.repeats))
             except torch.OutOfMemoryError as e:

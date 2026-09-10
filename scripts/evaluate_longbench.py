@@ -193,6 +193,7 @@ def main():
                 del ids
                 ctl.bank = {}
                 gc.collect()
+                torch.cuda.empty_cache()
                 if (index+1) % 25 == 0:
                     checkpoint(dest, f'LongBench {task} checkpoint {index+1}/{len(rows)}', False)
             checkpoint(dest, f'complete LongBench {task} across {len(methods)} policies', args.push)
