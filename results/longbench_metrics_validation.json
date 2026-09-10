@@ -1,0 +1,26 @@
+{
+  "scope": "Dependency smoke: official metrics accept a real reference answer from every task",
+  "scores": {
+    "narrativeqa": 1.0,
+    "qasper": 1.0,
+    "multifieldqa_en": 1.0,
+    "multifieldqa_zh": 1.0,
+    "hotpotqa": 1.0,
+    "2wikimqa": 1.0,
+    "musique": 1.0,
+    "dureader": 0.999999995,
+    "gov_report": 0.999999995,
+    "qmsum": 0.999999995,
+    "multi_news": 0.999999995,
+    "vcsum": 0.999999995,
+    "trec": 1.0,
+    "triviaqa": 1.0,
+    "samsum": 0.999999995,
+    "lsht": 1.0,
+    "passage_retrieval_en": 1.0,
+    "passage_count": 1.0,
+    "passage_retrieval_zh": 1.0,
+    "lcc": 1.0,
+    "repobench-p": 1.0
+  }
+}

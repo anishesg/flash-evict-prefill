@@ -18,7 +18,7 @@ Scoring uses tiled replay inside one kernel launch. See the
 the follow-up report. A separate [frozen full evaluation](results/LONGBENCH_PLAN.md)
 covers all 4,750 examples in 21 tasks, 11 methods, and the value-only and suffix-only
 controls. Its runner saves predictions individually and pushes each completed task.
-The three reporting tests check task averaging, paired intervals, and incomplete
+The four reporting tests check task averaging, paired intervals, and incomplete
 or duplicated evaluation records; ten adapter tests check the shared evaluation path.
 Run `scripts/run_followup.py` with the kv-distill Python environment and
 `PYTHONPATH=.:/home/qcb/kv-distill` to resume the sequential performance and quality campaign.

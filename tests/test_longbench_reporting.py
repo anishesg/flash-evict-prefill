@@ -61,3 +61,20 @@ def test_duplicate_records_fail_coverage_audit(tmp_path):
     result = report(tmp_path)
     assert result.returncode != 0
     assert 'Duplicate records' in result.stderr
+
+
+def test_changed_prompt_hash_fails_even_with_full_counts(tmp_path):
+    fixture_run(tmp_path)
+    path = tmp_path/'data_manifest.json'
+    manifest = json.loads(path.read_text())
+    manifest['examples'] = [dict(id=f'{task}:{i}', task=task, input_ids_sha256='frozen')
+                            for task, count in [('narrativeqa', 3), ('qasper', 1)] for i in range(count)]
+    path.write_text(json.dumps(manifest))
+    for path in (tmp_path/'pred').glob('*/*.jsonl'):
+        rows = [json.loads(line) for line in path.read_text().splitlines()]
+        for row in rows:
+            row['input_ids_sha256'] = 'changed' if path.parent.name == 'snap_256' else 'frozen'
+        path.write_text(''.join(json.dumps(row)+'\n' for row in rows))
+    result = report(tmp_path)
+    assert result.returncode != 0
+    assert 'do not match frozen inputs' in result.stderr
