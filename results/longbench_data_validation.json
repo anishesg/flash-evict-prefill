@@ -1,0 +1,29 @@
+{
+  "complete": true,
+  "scope": "All prepared files and every tokenized record match the frozen manifest; evaluator parsing succeeds; answer budgets fit the context limit",
+  "manifest_sha256": "32f4f10493c7af292c1879cbb1bf8a8808e617960da7385fe16fbfb1a2546f58",
+  "examples": 4750,
+  "tasks": {
+    "narrativeqa": 200,
+    "qasper": 200,
+    "multifieldqa_en": 150,
+    "multifieldqa_zh": 200,
+    "hotpotqa": 200,
+    "2wikimqa": 200,
+    "musique": 200,
+    "dureader": 200,
+    "gov_report": 200,
+    "qmsum": 200,
+    "multi_news": 200,
+    "vcsum": 200,
+    "trec": 200,
+    "triviaqa": 200,
+    "samsum": 200,
+    "lsht": 200,
+    "passage_count": 200,
+    "passage_retrieval_en": 200,
+    "passage_retrieval_zh": 200,
+    "lcc": 500,
+    "repobench-p": 500
+  }
+}
