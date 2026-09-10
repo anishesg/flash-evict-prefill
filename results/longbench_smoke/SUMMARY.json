@@ -8,14 +8,15 @@
   "methods": {
     "full": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 13.333333333333334
+        "narrativeqa": 13.333333333333334,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -23,14 +24,15 @@
     },
     "snap_256": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 0
+        "narrativeqa": 0,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -38,14 +40,15 @@
     },
     "d01_r0_256": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 0
+        "narrativeqa": 0,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -53,14 +56,15 @@
     },
     "d0.1_w128_r0_256": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 0
+        "narrativeqa": 0,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -68,14 +72,15 @@
     },
     "d0.1_w128_r64_256": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 0
+        "narrativeqa": 0,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -83,14 +88,15 @@
     },
     "snap_1024": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 0
+        "narrativeqa": 0,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -98,14 +104,15 @@
     },
     "d01_r0_1024": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 13.333333333333334
+        "narrativeqa": 13.333333333333334,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -113,14 +120,15 @@
     },
     "d0.1_w128_r0_1024": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 13.333333333333334
+        "narrativeqa": 13.333333333333334,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -128,14 +136,15 @@
     },
     "d0.1_w128_r64_1024": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 13.333333333333334
+        "narrativeqa": 13.333333333333334,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -143,14 +152,15 @@
     },
     "value_norm_only_256": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 0
+        "narrativeqa": 0,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,
@@ -158,14 +168,15 @@
     },
     "uniform_recent_256": {
       "complete": false,
-      "records": 1,
+      "records": 2,
       "counts": {
         "narrativeqa": 1,
-        "qasper": 0,
+        "qasper": 1,
         "multifieldqa_zh": 0
       },
       "completed_task_scores": {
-        "narrativeqa": 0
+        "narrativeqa": 0,
+        "qasper": 0
       },
       "macro_all": null,
       "macro_english16": null,

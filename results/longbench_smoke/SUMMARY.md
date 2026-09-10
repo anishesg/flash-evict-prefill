@@ -12,24 +12,24 @@ Compatible methods share prefill, and compatible caches batch decoding. MLP chun
 
 | Method | Records | All-task macro | English/code macro | Macro excluding tuning prompts |
 |---|---:|---:|---:|---:|
-| full | 1/3 | pending | pending | pending |
-| snap_256 | 1/3 | pending | pending | pending |
-| d01_r0_256 | 1/3 | pending | pending | pending |
-| d0.1_w128_r0_256 | 1/3 | pending | pending | pending |
-| d0.1_w128_r64_256 | 1/3 | pending | pending | pending |
-| snap_1024 | 1/3 | pending | pending | pending |
-| d01_r0_1024 | 1/3 | pending | pending | pending |
-| d0.1_w128_r0_1024 | 1/3 | pending | pending | pending |
-| d0.1_w128_r64_1024 | 1/3 | pending | pending | pending |
-| value_norm_only_256 | 1/3 | pending | pending | pending |
-| uniform_recent_256 | 1/3 | pending | pending | pending |
+| full | 2/3 | pending | pending | pending |
+| snap_256 | 2/3 | pending | pending | pending |
+| d01_r0_256 | 2/3 | pending | pending | pending |
+| d0.1_w128_r0_256 | 2/3 | pending | pending | pending |
+| d0.1_w128_r64_256 | 2/3 | pending | pending | pending |
+| snap_1024 | 2/3 | pending | pending | pending |
+| d01_r0_1024 | 2/3 | pending | pending | pending |
+| d0.1_w128_r0_1024 | 2/3 | pending | pending | pending |
+| d0.1_w128_r64_1024 | 2/3 | pending | pending | pending |
+| value_norm_only_256 | 2/3 | pending | pending | pending |
+| uniform_recent_256 | 2/3 | pending | pending | pending |
 
 ## Per-task quality
 
 | Task | full | snap_256 | d01_r0_256 | d0.1_w128_r0_256 | d0.1_w128_r64_256 | snap_1024 | d01_r0_1024 | d0.1_w128_r0_1024 | d0.1_w128_r64_1024 | value_norm_only_256 | uniform_recent_256 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | narrativeqa | 13.33 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 13.33 | 13.33 | 13.33 | 0.00 | 0.00 |
-| qasper | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
+| qasper | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
 | multifieldqa_zh | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
 
 ## Paired comparisons
