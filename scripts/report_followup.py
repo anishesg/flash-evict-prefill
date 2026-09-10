@@ -99,10 +99,17 @@ def main():
     chunked=json.loads(chunked_path.read_text()) if chunked_path.exists() else {}
     report['model_benchmark_complete']=model.get('complete',False)
     report['model_benchmark_chunked_complete']=chunked.get('complete',False)
+    report['requested_tables_complete']=(report['requested_performance_complete'] and
+        report['model_benchmark_complete'] and report['model_benchmark_chunked_complete'])
     report['complete']=all(p['complete'] for p in report['policies']) and report['benchmark_complete'] and report['model_benchmark_complete']
     if not args.partial and not report['complete']:raise RuntimeError('Benchmarks incomplete')
     (root/'FOLLOWUP.json').write_text(json.dumps(report,indent=2)+'\n')
-    lines=['# Query recency and observation-window follow-up','',f"Status: {'complete' if report['complete'] else 'in progress'}.",'',
+    status=('Requested performance tables: '+('complete' if report['requested_tables_complete'] else 'in progress')+
+            '. The larger historical exploratory grid remains '+('complete' if report['complete'] else 'partial')+'.')
+    lines=['# Query recency and observation-window follow-up','',status,'',
+           'The separate full 21-task evaluation is documented in [LONGBENCH_PLAN.md](LONGBENCH_PLAN.md); '
+           'its coverage and scores are written to `longbench_full/SUMMARY.md` as the campaign runs. '
+           'The quality tables below retain the earlier adaptive pilot.','',
            'Quality uses the same 19 prompts (4 LongBench, 2 GSM8K, 4 MMLU, 9 needle) and three greedy repetitions. '
            'Parameters were tuned on these prompts; these results do not establish held-out benchmark quality. '
            'Quality prompts are at most 8192 tokens. The 131K measurements use synthetic inputs and do not measure answer quality at that length.','',
