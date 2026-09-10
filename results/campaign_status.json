@@ -1,6 +1,7 @@
 {
-  "phase": "waiting_for_running_model_benchmark",
-  "updated_unix": 1789076680.128234,
+  "phase": "scripts/benchmark_model.py",
+  "updated_unix": 1789076682.3401818,
   "driver_pid": 6641,
-  "child_pid": 6208
+  "child_pid": 6663,
+  "log": "results/model_benchmark_expandable.log"
 }

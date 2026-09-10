@@ -91,6 +91,21 @@ The MLP chunk size and allocator setting are shared by every method within a con
 | 131072 | d01_r0 | 1024 | 1024 | default | OOM | — | — |
 | 131072 | d0.1_w128_r0 | 1024 | 1024 | default | OOM | — | — |
 | 131072 | d0.1_w128_r64 | 1024 | 1024 | default | OOM | — | — |
+| 8192 | full | — | 1024 | expandable | 2.184 | 15.455 | 0.824 |
+| 8192 | snap_1024 | 1024 | 1024 | expandable | 2.212 | 15.086 | 0.455 |
+| 8192 | d01_r0 | 1024 | 1024 | expandable | 2.507 | 15.086 | 0.455 |
+| 8192 | d0.1_w128_r0 | 1024 | 1024 | expandable | 2.273 | 15.086 | 0.455 |
+| 8192 | d0.1_w128_r64 | 1024 | 1024 | expandable | 2.273 | 15.086 | 0.455 |
+| 32768 | full | — | 1024 | expandable | 11.395 | 17.928 | 3.297 |
+| 32768 | snap_1024 | 1024 | 1024 | expandable | 11.552 | 16.293 | 1.662 |
+| 32768 | d01_r0 | 1024 | 1024 | expandable | 17.085 | 16.293 | 1.662 |
+| 32768 | d0.1_w128_r0 | 1024 | 1024 | expandable | 12.771 | 16.293 | 1.662 |
+| 32768 | d0.1_w128_r64 | 1024 | 1024 | expandable | 12.776 | 16.293 | 1.662 |
+| 131072 | full | — | 1024 | expandable | OOM | — | — |
+| 131072 | snap_1024 | 1024 | 1024 | expandable | OOM | — | — |
+| 131072 | d01_r0 | 1024 | 1024 | expandable | OOM | — | — |
+| 131072 | d0.1_w128_r0 | 1024 | 1024 | expandable | OOM | — | — |
+| 131072 | d0.1_w128_r64 | 1024 | 1024 | expandable | OOM | — | — |
 
 ## Interpretation
 
