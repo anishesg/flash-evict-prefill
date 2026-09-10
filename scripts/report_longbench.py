@@ -33,6 +33,11 @@ def main():
             ids = {r['id'] for r in rows}
             if len(rows) != len(ids):
                 raise ValueError(f'Duplicate records: {path}')
+            if 'examples' in manifest:
+                examples = [e for e in manifest['examples'] if e['task'] == task][:expected[task]]
+                known = {e['id']: e for e in examples}
+                if not ids <= known.keys() or any(r['input_ids_sha256'] != known[r['id']]['input_ids_sha256'] for r in rows):
+                    raise ValueError(f'Prediction identities do not match frozen inputs: {path}')
             records[name][task] = {r['id']: r for r in rows}
             counts[task] = len(rows)
             if len(rows) == expected[task]:
