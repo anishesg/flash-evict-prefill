@@ -22,20 +22,39 @@ def main():
     summaries=[]
     for path in sorted(Path('results').glob('benchmark*.json')):
         report=json.loads(path.read_text());a=report['args']
-        lines += [f'### {path.name}', '',f'BF16, B=1, Hq={a["heads"]}, Hkv={a["kv_heads"]}, D={a["dim"]}, retention=10%.', '',
+        bench_complete=len(report['rows'])==len(a['lengths'])*6
+        contention_checked=all('other_compute_pids' in r for r in report['rows'])
+        no_contention=contention_checked and all(not r['other_compute_pids'] for r in report['rows'])
+        timing_status='no other CUDA processes observed before/after any measurement' if no_contention else 'external activity observed or not excluded'
+        lines += [f'### {path.name}', '',f'BF16, B=1, Hq={a["heads"]}, Hkv={a["kv_heads"]}, D={a["dim"]}, retention=10%.',
+                  f'Sweep {"complete" if bench_complete else "incomplete"}; {timing_status}.', '',
                   '| Tokens | Method | Median ms | Peak additional MiB |','|---:|---|---:|---:|']
         for r in sorted(report['rows'],key=lambda r:(r['n'],r['method'])):
             if 'median_ms' not in r:
                 lines.append(f'| {r["n"]} | {r["method"]} | {r.get("error")} | — |');continue
             lines.append(f'| {r["n"]} | {r["method"]} | {r["median_ms"]:.3f} | {r["peak_increment_bytes"]/2**20:.3f} |')
         lines.append('')
+        if report.get('kernel_resources'):
+            resources=report['kernel_resources']
+            lines += [f'Triton resources: maximum {max(r["registers_per_thread"] for r in resources)} registers/thread, {max(r["shared_bytes"] for r in resources)} shared bytes/program, {max(r["spills"] for r in resources)} reported spills, and {max(r["global_scratch_bytes"] for r in resources)} global scratch bytes.','']
+        if path.name=='benchmark_qwen.json' and bench_complete and no_contention:
+            largest=max(a['lengths'])
+            selected={r['method']:r for r in report['rows'] if r['n']==largest}
+            fused,snap=selected['fused_replay_topk'],selected['flash_snap_w32']
+            lines[2:2]=[f'Clean A10G benchmark at {largest:,} tokens and Qwen head dimensions (one layer): fused replay + top-k takes {fused["median_ms"]:.2f} ms and {fused["peak_increment_bytes"]/2**20:.2f} MiB of additional allocations, versus {snap["median_ms"]:.2f} ms and {snap["peak_increment_bytes"]/2**20:.2f} MiB for FlashAttention + SnapKV with w=32. Outputs and selection are included; input Q/K/V and model weights are excluded.','']
     qpath=Path(args.quality)
     rows=[json.loads(line) for path in sorted(qpath.glob('seed_*.jsonl')) for line in path.read_text().splitlines()]
     protocol=json.loads((qpath/'protocol.json').read_text()) if (qpath/'protocol.json').exists() else {}
     expected=len(protocol.get('example_ids',[]))*len(protocol.get('methods',[]))*len(protocol.get('seeds',[]))
-    complete=len(rows)==expected and expected>0 and (qpath/'complete.json').exists()
+    expected_keys={(seed,rid,method) for seed in protocol.get('seeds',[])
+                   for rid in protocol.get('example_ids',[]) for method in protocol.get('methods',[])}
+    actual_keys={(r['seed'],r['id'],r['method']) for r in rows}
+    complete=len(rows)==len(actual_keys)==expected and expected>0 and actual_keys==expected_keys and (qpath/'complete.json').exists()
+    suite_sizes=defaultdict(int)
+    for rid in protocol.get('example_ids',[]):suite_sizes[rid.split(':')[0]]+=1
+    sample_description=', '.join(f'{n} {suite} prompts' for suite,n in sorted(suite_sizes.items()))
     lines += ['## Qwen-2.5-7B quality','',f'Status: {"complete" if complete else "incomplete"}; {len(rows)} / {expected} planned records.','',
-              'The frozen exploratory pilot uses nine needle prompts (three lengths × three depths), four LongBench prompts, two GSM8K prompts, and four MMLU prompts. It is too small to establish a general quality advantage. Greedy decoding is repeated across seeds; seed spread is a reproducibility check, not independent sampling uncertainty.','',
+              f'The frozen exploratory pilot uses {sample_description}. Greedy decoding is repeated across seeds; seed spread is a reproducibility check, not independent sampling uncertainty. The default 19-prompt subset is too small to establish a general quality advantage.','',
               'Fused retention is pure top-k with no reserved recent tokens. Fused and SnapKV compress only prefill and then allow cache growth. H2O uses its existing half-recent policy and dynamically evicts during decode; equal initial retention is not equal lifetime memory. Fixed budgets 256 and 1024 directly pair fused scoring with SnapKV. Budgets at or above prompt length retain the entire prompt.','']
     groups=defaultdict(list)
     for row in rows:groups[(row['suite'],row['method'],row['seed'])].append(row)
@@ -79,8 +98,14 @@ def main():
                                 'output_ids_equal':r['output_ids']==old[key]['output_ids']})
     if comparisons:
         lines += [f'Historical baseline reproduction: {sum(c["score_equal"] for c in comparisons)} / {len(comparisons)} task scores and {sum(c["output_ids_equal"] for c in comparisons)} / {len(comparisons)} token sequences match the saved original pilot on the same IDs, methods, and seeds.','']
+    if complete:
+        means={(r['suite'],r['method']):r['quality_mean'] for r in summaries}
+        lead=[f'Completed {len(rows)} conditions: {len(protocol["example_ids"])} prompts × {len(protocol["methods"])} methods × {len(protocol["seeds"])} greedy repetitions.','']
+        if all(key in means for key in [('longbench','fused_1024'),('longbench','snap_1024'),('needle','fused_1024'),('needle','snap_1024')]):
+            lead += [f'At a 1,024-token initial budget, fused scoring obtains {means[("longbench","fused_1024")]:.2f} versus SnapKV {means[("longbench","snap_1024")]:.2f} on LongBench, and {means[("needle","fused_1024")]:.2f}% versus {means[("needle","snap_1024")]:.2f}% needle exact match. These are exploratory pilot results, not full-benchmark estimates.','']
+        lines[2:2]=lead
     Path(args.output).write_text('\n'.join(lines)+'\n')
-    Path(args.output).with_suffix('.json').write_text(json.dumps({'complete':complete,'records':len(rows),'expected':expected,'quality':summaries,'full_controls':controls,'historical_comparisons':comparisons},indent=2)+'\n')
+    Path(args.output).with_suffix('.json').write_text(json.dumps({'complete':complete,'records':len(rows),'expected':expected,'suite_sizes':suite_sizes,'quality':summaries,'full_controls':controls,'historical_comparisons':comparisons},indent=2)+'\n')
     print(f'Wrote {args.output}: {len(rows)}/{expected} quality records')
 
 

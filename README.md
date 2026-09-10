@@ -4,6 +4,12 @@ Research prototype: exact multi-query, value-weighted KV importance without
 materializing the attention matrix. Supports CUDA fp16/bf16, causal/noncausal
 self-attention, GQA, and arbitrary input strides. Inference only.
 
+**Result:** the implementation passes correctness checks and uses linear live
+memory, but the requested all-query top-k policy loses substantial quality to
+SnapKV in the frozen Qwen pilot. Scoring requires a replay and has a latency
+penalty. The proposed first-ever, single-pass, zero-overhead paper claim is not
+supported. See [results](results/REPORT.md) and [the mathematical analysis](RESEARCH_NOTES.md).
+
 ```python
 from flash_evict import evict
 out, importance, indices, eviction_mask = evict(q, k, v, budget=256)
@@ -86,6 +92,7 @@ PYTHONPATH=. /home/qcb/kv-distill/.venv/bin/python scripts/benchmark.py \
     --heads 28 --kv-heads 4 --dim 128 --output results/benchmark_qwen.json
 PYTHONPATH=.:/home/qcb/kv-distill /home/qcb/kv-distill/.venv/bin/python scripts/evaluate.py
 /home/qcb/kv-distill/.venv/bin/python scripts/report.py
+/home/qcb/kv-distill/.venv/bin/python scripts/plot_quality.py
 ```
 
 See [the experimental report](results/REPORT.md) and raw JSON results. GPU
@@ -95,6 +102,14 @@ Qwen evaluation uses the existing frozen pilot data, model revision, baseline
 cache lifecycle, and metrics. The default selects a small, explicitly frozen
 19-prompt exploratory subset; `--full-pilot` in a new output directory runs all
 118 prompts. Partial reports clearly state incomplete record counts.
+
+The completed pilot contains 627 conditions (19 prompts × 11 methods × 3 greedy
+repetitions). All 57 uncompressed fused controls and all 285 repeated historical
+baseline conditions reproduce the reference token sequences. Three repeated
+greedy seeds do not provide independent quality samples. At budget 1024, fused
+versus SnapKV scores are 25.00 versus 92.65 on four LongBench prompts, and 11.11%
+versus 100% exact match on nine needle prompts. The compressed policy, rather
+than the uncompressed prefill replacement, is responsible for this observed gap.
 
 The adapter is optional and leaves `/home/qcb/kv-distill` unchanged. It accepts
 only that evaluator's unpadded, single-prompt, contiguous-position prefill flow;

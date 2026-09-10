@@ -15,12 +15,13 @@ def main():
     labels=['Full','H2O 5%','H2O 10%','Snap 256','Fused 256','Snap 1024','Fused 1024']
     colors=['#555555','#888888','#aaaaaa','#d97706','#2563eb','#d97706','#2563eb']
     fig,axes=plt.subplots(1,2,figsize=(10,4.4))
-    for ax,suite,title in zip(axes,['longbench','needle'],['LongBench: 4 prompts / 4 tasks','Needle retrieval: 9 prompts']):
+    for ax,suite in zip(axes,['longbench','needle']):
         ys=[values[(suite,m)] for m in methods]
         bars=ax.bar(range(len(methods)),ys,color=colors)
         ax.bar_label(bars,labels=[f'{y:.1f}' for y in ys],padding=3,fontsize=8)
         ax.set_xticks(range(len(methods)),labels,rotation=35,ha='right')
-        ax.set_ylim(0,115);ax.set_ylabel('Quality (0–100)');ax.set_title(title)
+        ax.set_ylim(0,115);ax.set_ylabel('Quality (0–100)')
+        ax.set_title(f'{suite.capitalize()}: {report["suite_sizes"][suite]} prompts')
         ax.grid(axis='y',alpha=.2);ax.set_axisbelow(True)
     fig.suptitle('Qwen-2.5-7B exploratory pilot; three greedy repeats, not independent quality samples',fontsize=10)
     fig.tight_layout()
