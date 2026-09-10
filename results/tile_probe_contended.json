@@ -1,0 +1,48 @@
+{
+  "shape": [
+    1,
+    28,
+    4,
+    4096,
+    128
+  ],
+  "dtype": "bf16",
+  "scope": "contended exploratory tile sweep; no exclusive-device claim",
+  "rows": [
+    {
+      "block_q": 16,
+      "block_k": 64,
+      "median_ms": 8.587776184082031
+    },
+    {
+      "block_q": 32,
+      "block_k": 32,
+      "median_ms": 4.4444801807403564
+    },
+    {
+      "block_q": 32,
+      "block_k": 64,
+      "median_ms": 5.282815933227539
+    },
+    {
+      "block_q": 32,
+      "block_k": 128,
+      "median_ms": 7.085567951202393
+    },
+    {
+      "block_q": 64,
+      "block_k": 32,
+      "median_ms": 4.4062721729278564
+    },
+    {
+      "block_q": 64,
+      "block_k": 64,
+      "median_ms": 5.339136123657227
+    },
+    {
+      "block_q": 64,
+      "block_k": 128,
+      "median_ms": 5.340672016143799
+    }
+  ]
+}

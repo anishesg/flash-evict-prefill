@@ -66,8 +66,21 @@ def main():
                                  'full_score':r['score'],'fused_full_score':other['score']})
         lines+=[f'Full-cache control: {sum(c["output_ids_equal"] for c in controls)} / {len(controls)} paired generations have identical token IDs. Finite-precision kernel changes can alter greedy output; controls are retained in the summary JSON.','']
     else:controls=[]
+    historical=[]
+    for path in sorted(Path('/home/qcb/kv-distill/results/original_pilot/pilot').glob('seed_*.jsonl')):
+        historical.extend(json.loads(line) for line in path.read_text().splitlines())
+    old={(r['id'],r['seed'],r['method']):r for r in historical}
+    comparisons=[]
+    for r in rows:
+        key=(r['id'],r['seed'],r['method'])
+        if key in old:
+            comparisons.append({'id':r['id'],'seed':r['seed'],'method':r['method'],
+                                'score_equal':r['score']==old[key]['score'],
+                                'output_ids_equal':r['output_ids']==old[key]['output_ids']})
+    if comparisons:
+        lines += [f'Historical baseline reproduction: {sum(c["score_equal"] for c in comparisons)} / {len(comparisons)} task scores and {sum(c["output_ids_equal"] for c in comparisons)} / {len(comparisons)} token sequences match the saved original pilot on the same IDs, methods, and seeds.','']
     Path(args.output).write_text('\n'.join(lines)+'\n')
-    Path(args.output).with_suffix('.json').write_text(json.dumps({'complete':complete,'records':len(rows),'expected':expected,'quality':summaries,'full_controls':controls},indent=2)+'\n')
+    Path(args.output).with_suffix('.json').write_text(json.dumps({'complete':complete,'records':len(rows),'expected':expected,'quality':summaries,'full_controls':controls,'historical_comparisons':comparisons},indent=2)+'\n')
     print(f'Wrote {args.output}: {len(rows)}/{expected} quality records')
 
 

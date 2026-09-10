@@ -1,0 +1,14 @@
+{
+  "torch": "2.14.0+cu130",
+  "source_sha256": {
+    "flash_evict/prefill.py": "aa5b3ce8b8b4804f8b3678a8b7d5f8eff3ff8531deb9ac52ce83ac8d8f8daef1",
+    "flash_evict/kv_distill_adapter.py": "591dbe7e43e4768a55c36ef171fc8edcc32e51b74fc7c1e5e1acb62452789398",
+    "/home/qcb/kv-distill/kv_distill/attention.py": "c8e8e64d10f97ace751e0e1643f560509e50abafd5fec62cfa2d7b25d6cfae5f",
+    "/home/qcb/kv-distill/kv_distill/engine.py": "b9f0bd8be6cad69399663d8146f0fc7731190bd3987d6156b67a5415a7d6b54a",
+    "/home/qcb/kv-distill/kv_distill/cache.py": "bb10dc402cf33203b13fa916f048ce77d49873d2751b45afc9b65e18fc5f521e",
+    "/home/qcb/kv-distill/kv_distill/metrics.py": "e35ae519ba126d0eb78d509de2ac57073ce483a4122ae06116ab678f0f7d91ce"
+  },
+  "git_revision": "4c0c377db2a17b070aa675362328e5e4d62682b9",
+  "nvidia_smi_before": "Thu Sep 10 17:12:45 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 595.91.07              Driver Version: 595.91.07      CUDA Version: 13.2     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA A10G                    On  |   00000000:00:1E.0 Off |                    0 |\n|  0%   51C    P0             72W /  300W |       0MiB /  23028MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|  No running processes found                                                             |\n+-----------------------------------------------------------------------------------------+\n",
+  "started_unix": 1789060365.756573
+}

@@ -84,9 +84,62 @@ BF16, B=1, Hq=28, Hkv=4, D=128, retention=10%.
 
 ## Qwen-2.5-7B quality
 
-Status: incomplete; 0 / 627 planned records.
+Status: incomplete; 209 / 627 planned records.
 
 The frozen exploratory pilot uses nine needle prompts (three lengths × three depths), four LongBench prompts, two GSM8K prompts, and four MMLU prompts. It is too small to establish a general quality advantage. Greedy decoding is repeated across seeds; seed spread is a reproducibility check, not independent sampling uncertainty.
 
 Fused retention is pure top-k with no reserved recent tokens. Fused and SnapKV compress only prefill and then allow cache growth. H2O uses its existing half-recent policy and dynamically evicts during decode; equal initial retention is not equal lifetime memory. Fixed budgets 256 and 1024 directly pair fused scoring with SnapKV.
+
+| Suite | Method | Quality mean ± seed std | Records | Mean decode s | Initial KV MiB |
+|---|---|---:|---:|---:|---:|
+| gsm8k | full | 100.00 ± 0.00 | 2 | 6.496 | 41.45 |
+| gsm8k | fused_0.05 | 0.00 ± 0.00 | 2 | 2.026 | 2.11 |
+| gsm8k | fused_0.1 | 0.00 ± 0.00 | 2 | 1.893 | 4.18 |
+| gsm8k | fused_0.2 | 0.00 ± 0.00 | 2 | 8.480 | 8.31 |
+| gsm8k | fused_1024 | 100.00 ± 0.00 | 2 | 6.496 | 41.45 |
+| gsm8k | fused_256 | 50.00 ± 0.00 | 2 | 6.954 | 14.00 |
+| gsm8k | fused_full | 100.00 ± 0.00 | 2 | 6.497 | 41.45 |
+| gsm8k | h2o_0.05 | 0.00 ± 0.00 | 2 | 9.854 | 2.11 |
+| gsm8k | h2o_0.1 | 0.00 ± 0.00 | 2 | 9.870 | 4.18 |
+| gsm8k | snap_1024 | 100.00 ± 0.00 | 2 | 6.496 | 41.45 |
+| gsm8k | snap_256 | 100.00 ± 0.00 | 2 | 6.375 | 14.00 |
+| longbench | full | 67.86 ± 0.00 | 4 | 0.462 | 396.73 |
+| longbench | fused_0.05 | 8.33 ± 0.00 | 4 | 0.766 | 19.87 |
+| longbench | fused_0.1 | 6.25 ± 0.00 | 4 | 0.900 | 39.72 |
+| longbench | fused_0.2 | 25.00 ± 0.00 | 4 | 0.822 | 79.38 |
+| longbench | fused_1024 | 25.00 ± 0.00 | 4 | 0.630 | 56.00 |
+| longbench | fused_256 | 7.14 ± 0.00 | 4 | 0.527 | 14.00 |
+| longbench | fused_full | 67.86 ± 0.00 | 4 | 0.449 | 396.73 |
+| longbench | h2o_0.05 | 29.90 ± 0.00 | 4 | 0.675 | 19.87 |
+| longbench | h2o_0.1 | 38.33 ± 0.00 | 4 | 0.442 | 39.72 |
+| longbench | snap_1024 | 92.65 ± 0.00 | 4 | 0.329 | 56.00 |
+| longbench | snap_256 | 76.19 ± 0.00 | 4 | 0.369 | 14.00 |
+| mmlu | full | 75.00 ± 0.00 | 4 | 0.037 | 25.35 |
+| mmlu | fused_0.05 | 25.00 ± 0.00 | 4 | 0.035 | 1.30 |
+| mmlu | fused_0.1 | 25.00 ± 0.00 | 4 | 0.035 | 2.57 |
+| mmlu | fused_0.2 | 50.00 ± 0.00 | 4 | 0.035 | 5.09 |
+| mmlu | fused_1024 | 75.00 ± 0.00 | 4 | 0.036 | 25.35 |
+| mmlu | fused_256 | 50.00 ± 0.00 | 4 | 0.036 | 14.00 |
+| mmlu | fused_full | 75.00 ± 0.00 | 4 | 0.036 | 25.35 |
+| mmlu | h2o_0.05 | 50.00 ± 0.00 | 4 | 0.040 | 1.30 |
+| mmlu | h2o_0.1 | 50.00 ± 0.00 | 4 | 0.040 | 2.57 |
+| mmlu | snap_1024 | 75.00 ± 0.00 | 4 | 0.036 | 25.35 |
+| mmlu | snap_256 | 75.00 ± 0.00 | 4 | 0.036 | 14.00 |
+| needle | full | 100.00 ± 0.00 | 9 | 0.309 | 256.62 |
+| needle | fused_0.05 | 0.00 ± 0.00 | 9 | 0.548 | 12.87 |
+| needle | fused_0.1 | 0.00 ± 0.00 | 9 | 0.552 | 25.68 |
+| needle | fused_0.2 | 0.00 ± 0.00 | 9 | 0.529 | 51.35 |
+| needle | fused_1024 | 11.11 ± 0.00 | 9 | 0.422 | 56.00 |
+| needle | fused_256 | 0.00 ± 0.00 | 9 | 0.531 | 14.00 |
+| needle | fused_full | 100.00 ± 0.00 | 9 | 0.309 | 256.62 |
+| needle | h2o_0.05 | 0.00 ± 0.00 | 9 | 0.273 | 12.87 |
+| needle | h2o_0.1 | 11.11 ± 0.00 | 9 | 0.275 | 25.68 |
+| needle | snap_1024 | 100.00 ± 0.00 | 9 | 0.256 | 56.00 |
+| needle | snap_256 | 100.00 ± 0.00 | 9 | 0.246 | 14.00 |
+
+Prefill wall times in raw quality records include all model layers. Baseline prefill includes the existing evaluator’s scoring diagnostics; they must not be used for an end-to-end speedup claim. Use the kernel benchmarks for latency comparisons.
+
+Full-cache control: 19 / 19 paired generations have identical token IDs. Finite-precision kernel changes can alter greedy output; controls are retained in the summary JSON.
+
+Historical baseline reproduction: 95 / 95 task scores and 95 / 95 token sequences match the saved original pilot on the same IDs, methods, and seeds.
 

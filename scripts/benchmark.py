@@ -4,6 +4,7 @@ import gc
 import hashlib
 import json
 import math
+import os
 import statistics
 import subprocess
 from pathlib import Path
@@ -55,6 +56,7 @@ def main():
     p.add_argument('--dim',type=int,default=64)
     p.add_argument('--repeats',type=int,default=5)
     p.add_argument('--output',default='results/benchmark.json')
+    p.add_argument('--require-idle',action='store_true',help='Abort if another CUDA process is observed')
     args=p.parse_args()
     torch.manual_seed(20260910)
     torch.set_num_threads(8)
@@ -85,6 +87,9 @@ def main():
         items=list(methods.items());random.Random(n).shuffle(items)
         for name,fn in items:
             other_before=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid,process_name,used_memory','--format=csv,noheader'],text=True)
+            pids_before=[int(line.split(',')[0]) for line in other_before.splitlines() if line.strip()]
+            if args.require_idle and any(pid!=os.getpid() for pid in pids_before):
+                raise RuntimeError('Another CUDA process is present; refusing an uncontended timing claim')
             try:
                 row={"n":n,"method":name,"budget":budget,**measure(fn,args.repeats)}
             except torch.OutOfMemoryError as e:
@@ -92,9 +97,13 @@ def main():
                 gc.collect();torch.cuda.empty_cache()
             row['compute_processes_before']=other_before
             row['compute_processes_after']=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid,process_name,used_memory','--format=csv,noheader'],text=True)
+            pids_after=[int(line.split(',')[0]) for line in row['compute_processes_after'].splitlines() if line.strip()]
+            row['other_compute_pids']=sorted(set(pid for pid in pids_before+pids_after if pid!=os.getpid()))
             report['rows'].append(row)
             output.write_text(json.dumps(report,indent=2)+'\n')
             print(json.dumps(row),flush=True)
+            if args.require_idle and row['other_compute_pids']:
+                raise RuntimeError('Another CUDA process appeared during measurement; row is marked contended')
         del q,k,v
         gc.collect();torch.cuda.empty_cache()
 
