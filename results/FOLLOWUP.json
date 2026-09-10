@@ -8761,6 +8761,8 @@
   "benchmark_complete": false,
   "requested_performance_complete": true,
   "benchmark_contended_rows": 0,
-  "model_benchmark_complete": false,
+  "model_benchmark_complete": true,
+  "model_benchmark_chunked_complete": false,
+  "requested_tables_complete": false,
   "complete": false
 }

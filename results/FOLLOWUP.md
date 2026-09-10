@@ -1,6 +1,8 @@
 # Query recency and observation-window follow-up
 
-Status: in progress.
+Requested performance tables: in progress. The larger historical exploratory grid remains partial.
+
+The separate full 21-task evaluation is documented in [LONGBENCH_PLAN.md](LONGBENCH_PLAN.md); its coverage and scores are written to `longbench_full/SUMMARY.md` as the campaign runs. The quality tables below retain the earlier adaptive pilot.
 
 Quality uses the same 19 prompts (4 LongBench, 2 GSM8K, 4 MMLU, 9 needle) and three greedy repetitions. Parameters were tuned on these prompts; these results do not establish held-out benchmark quality. Quality prompts are at most 8192 tokens. The 131K measurements use synthetic inputs and do not measure answer quality at that length.
 
@@ -55,8 +57,25 @@ Dominance considers all four quality scores (higher is better) and 131K addition
 
 All 28 Qwen layers, BF16 weights, no scoring diagnostics, and immediate per-layer compaction. Synthetic token sequences measure shape-dependent cost; timings exclude tokenization, the LM head, and decode. Absolute allocator peaks include weights, caches, attention outputs, and MLP activations.
 
-| Tokens | Method | Median seconds | Absolute peak GiB | Incremental GiB |
-|---:|---|---:|---:|---:|
+The MLP chunk size is shared by every method within a configuration; zero means the original unchunked MLP. OOM is an observed allocation failure, not a missing measurement. Rows with another CUDA process are excluded.
+
+| Tokens | Method | Budget | MLP chunk | Median seconds | Absolute peak GiB | Incremental GiB |
+|---:|---|---:|---:|---:|---:|---:|
+| 8192 | full | — | 0 | 2.120 | 16.197 | 1.523 |
+| 8192 | snap_1024 | 1024 | 0 | 2.147 | 15.814 | 1.141 |
+| 8192 | d01_r0 | 1024 | 0 | 2.442 | 15.814 | 1.141 |
+| 8192 | d0.1_w128_r0 | 1024 | 0 | 2.207 | 15.814 | 1.141 |
+| 8192 | d0.1_w128_r64 | 1024 | 0 | 2.207 | 15.814 | 1.141 |
+| 32768 | full | — | 0 | OOM | — | — |
+| 32768 | snap_1024 | 1024 | 0 | 11.071 | 19.072 | 4.399 |
+| 32768 | d01_r0 | 1024 | 0 | 16.507 | 19.072 | 4.399 |
+| 32768 | d0.1_w128_r0 | 1024 | 0 | 12.316 | 19.072 | 4.399 |
+| 32768 | d0.1_w128_r64 | 1024 | 0 | 12.359 | 19.072 | 4.399 |
+| 131072 | full | — | 0 | OOM | — | — |
+| 131072 | snap_1024 | 1024 | 0 | OOM | — | — |
+| 131072 | d01_r0 | 1024 | 0 | OOM | — | — |
+| 131072 | d0.1_w128_r0 | 1024 | 0 | OOM | — | — |
+| 131072 | d0.1_w128_r64 | 1024 | 0 | OOM | — | — |
 
 ## Interpretation
 
