@@ -149,7 +149,8 @@ def main():
     for measurement in (model,chunked):
         for row in measurement.get('rows',[]):
             if row.get('other_compute_pids'):continue
-            prefix=f"| {row['n']} | {row['method']} | {row.get('budget') or '—'} | {measurement['args']['mlp_chunk_size']} |"
+            budget='—' if row['method']=='full' else row['budget']
+            prefix=f"| {row['n']} | {row['method']} | {budget} | {measurement['args']['mlp_chunk_size']} |"
             if 'error' in row:lines.append(prefix+' OOM | — | — |')
             else:lines.append(prefix+f" {row['median_seconds']:.3f} | {row['peak_allocated_bytes']/2**30:.3f} | {row['peak_increment_bytes']/2**30:.3f} |")
     lines+=['','## Interpretation','',
