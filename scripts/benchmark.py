@@ -11,6 +11,7 @@ from pathlib import Path
 import torch
 import triton
 from flash_evict import prefill,evict
+from flash_evict.prefill import _prefill
 from flash_evict.baselines import flash_attention,flash_snap
 
 
@@ -100,6 +101,14 @@ def main():
             pids_after=[int(line.split(',')[0]) for line in row['compute_processes_after'].splitlines() if line.strip()]
             row['other_compute_pids']=sorted(set(pid for pid in pids_before+pids_after if pid!=os.getpid()))
             report['rows'].append(row)
+            report['kernel_resources']=[
+                {'hash':kernel.hash,'registers_per_thread':kernel.n_regs,
+                 'spills':kernel.n_spills,'shared_bytes':kernel.metadata.shared,
+                 'global_scratch_bytes':kernel.metadata.global_scratch_size,
+                 'constants':{str(key):value for key,value in kernel.src.constants.items()
+                              if isinstance(value,(str,int,float,bool))}}
+                for bundle in _prefill.device_caches.values()
+                for kernel in bundle[0].values()]
             output.write_text(json.dumps(report,indent=2)+'\n')
             print(json.dumps(row),flush=True)
             if args.require_idle and row['other_compute_pids']:

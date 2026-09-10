@@ -36,7 +36,7 @@ def main():
     complete=len(rows)==expected and expected>0 and (qpath/'complete.json').exists()
     lines += ['## Qwen-2.5-7B quality','',f'Status: {"complete" if complete else "incomplete"}; {len(rows)} / {expected} planned records.','',
               'The frozen exploratory pilot uses nine needle prompts (three lengths × three depths), four LongBench prompts, two GSM8K prompts, and four MMLU prompts. It is too small to establish a general quality advantage. Greedy decoding is repeated across seeds; seed spread is a reproducibility check, not independent sampling uncertainty.','',
-              'Fused retention is pure top-k with no reserved recent tokens. Fused and SnapKV compress only prefill and then allow cache growth. H2O uses its existing half-recent policy and dynamically evicts during decode; equal initial retention is not equal lifetime memory. Fixed budgets 256 and 1024 directly pair fused scoring with SnapKV.','']
+              'Fused retention is pure top-k with no reserved recent tokens. Fused and SnapKV compress only prefill and then allow cache growth. H2O uses its existing half-recent policy and dynamically evicts during decode; equal initial retention is not equal lifetime memory. Fixed budgets 256 and 1024 directly pair fused scoring with SnapKV. Budgets at or above prompt length retain the entire prompt.','']
     groups=defaultdict(list)
     for row in rows:groups[(row['suite'],row['method'],row['seed'])].append(row)
     aggregate=defaultdict(list)
