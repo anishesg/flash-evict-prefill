@@ -57,40 +57,40 @@ Dominance considers all four quality scores (higher is better) and 131K addition
 
 All 28 Qwen layers, BF16 weights, no scoring diagnostics, and immediate per-layer compaction. Synthetic token sequences measure shape-dependent cost; timings exclude tokenization, the LM head, and decode. Absolute allocator peaks include weights, caches, attention outputs, and MLP activations.
 
-The MLP chunk size is shared by every method within a configuration; zero means the original unchunked MLP. OOM is an observed allocation failure, not a missing measurement. Rows with another CUDA process are excluded.
+The MLP chunk size and allocator setting are shared by every method within a configuration; zero means the original unchunked MLP. Expandable means `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. OOM is an observed allocation failure, not a missing measurement. Rows with another CUDA process are excluded.
 
-| Tokens | Method | Budget | MLP chunk | Median seconds | Absolute peak GiB | Incremental GiB |
-|---:|---|---:|---:|---:|---:|---:|
-| 8192 | full | — | 0 | 2.120 | 16.197 | 1.523 |
-| 8192 | snap_1024 | 1024 | 0 | 2.147 | 15.814 | 1.141 |
-| 8192 | d01_r0 | 1024 | 0 | 2.442 | 15.814 | 1.141 |
-| 8192 | d0.1_w128_r0 | 1024 | 0 | 2.207 | 15.814 | 1.141 |
-| 8192 | d0.1_w128_r64 | 1024 | 0 | 2.207 | 15.814 | 1.141 |
-| 32768 | full | — | 0 | OOM | — | — |
-| 32768 | snap_1024 | 1024 | 0 | 11.071 | 19.072 | 4.399 |
-| 32768 | d01_r0 | 1024 | 0 | 16.507 | 19.072 | 4.399 |
-| 32768 | d0.1_w128_r0 | 1024 | 0 | 12.316 | 19.072 | 4.399 |
-| 32768 | d0.1_w128_r64 | 1024 | 0 | 12.359 | 19.072 | 4.399 |
-| 131072 | full | — | 0 | OOM | — | — |
-| 131072 | snap_1024 | 1024 | 0 | OOM | — | — |
-| 131072 | d01_r0 | 1024 | 0 | OOM | — | — |
-| 131072 | d0.1_w128_r0 | 1024 | 0 | OOM | — | — |
-| 131072 | d0.1_w128_r64 | 1024 | 0 | OOM | — | — |
-| 8192 | full | — | 1024 | 2.185 | 15.498 | 0.825 |
-| 8192 | snap_1024 | 1024 | 1024 | 2.213 | 15.129 | 0.456 |
-| 8192 | d01_r0 | 1024 | 1024 | 2.507 | 15.129 | 0.456 |
-| 8192 | d0.1_w128_r0 | 1024 | 1024 | 2.273 | 15.129 | 0.456 |
-| 8192 | d0.1_w128_r64 | 1024 | 1024 | 2.273 | 15.129 | 0.456 |
-| 32768 | full | — | 1024 | 11.438 | 17.971 | 3.297 |
-| 32768 | snap_1024 | 1024 | 1024 | 11.570 | 16.336 | 1.662 |
-| 32768 | d01_r0 | 1024 | 1024 | 16.871 | 16.336 | 1.662 |
-| 32768 | d0.1_w128_r0 | 1024 | 1024 | 12.653 | 16.336 | 1.662 |
-| 32768 | d0.1_w128_r64 | 1024 | 1024 | 12.719 | 16.336 | 1.662 |
-| 131072 | full | — | 1024 | OOM | — | — |
-| 131072 | snap_1024 | 1024 | 1024 | OOM | — | — |
-| 131072 | d01_r0 | 1024 | 1024 | OOM | — | — |
-| 131072 | d0.1_w128_r0 | 1024 | 1024 | OOM | — | — |
-| 131072 | d0.1_w128_r64 | 1024 | 1024 | OOM | — | — |
+| Tokens | Method | Budget | MLP chunk | Allocator | Median seconds | Absolute peak GiB | Incremental GiB |
+|---:|---|---:|---:|---|---:|---:|---:|
+| 8192 | full | — | 0 | default | 2.120 | 16.197 | 1.523 |
+| 8192 | snap_1024 | 1024 | 0 | default | 2.147 | 15.814 | 1.141 |
+| 8192 | d01_r0 | 1024 | 0 | default | 2.442 | 15.814 | 1.141 |
+| 8192 | d0.1_w128_r0 | 1024 | 0 | default | 2.207 | 15.814 | 1.141 |
+| 8192 | d0.1_w128_r64 | 1024 | 0 | default | 2.207 | 15.814 | 1.141 |
+| 32768 | full | — | 0 | default | OOM | — | — |
+| 32768 | snap_1024 | 1024 | 0 | default | 11.071 | 19.072 | 4.399 |
+| 32768 | d01_r0 | 1024 | 0 | default | 16.507 | 19.072 | 4.399 |
+| 32768 | d0.1_w128_r0 | 1024 | 0 | default | 12.316 | 19.072 | 4.399 |
+| 32768 | d0.1_w128_r64 | 1024 | 0 | default | 12.359 | 19.072 | 4.399 |
+| 131072 | full | — | 0 | default | OOM | — | — |
+| 131072 | snap_1024 | 1024 | 0 | default | OOM | — | — |
+| 131072 | d01_r0 | 1024 | 0 | default | OOM | — | — |
+| 131072 | d0.1_w128_r0 | 1024 | 0 | default | OOM | — | — |
+| 131072 | d0.1_w128_r64 | 1024 | 0 | default | OOM | — | — |
+| 8192 | full | — | 1024 | default | 2.185 | 15.498 | 0.825 |
+| 8192 | snap_1024 | 1024 | 1024 | default | 2.213 | 15.129 | 0.456 |
+| 8192 | d01_r0 | 1024 | 1024 | default | 2.507 | 15.129 | 0.456 |
+| 8192 | d0.1_w128_r0 | 1024 | 1024 | default | 2.273 | 15.129 | 0.456 |
+| 8192 | d0.1_w128_r64 | 1024 | 1024 | default | 2.273 | 15.129 | 0.456 |
+| 32768 | full | — | 1024 | default | 11.438 | 17.971 | 3.297 |
+| 32768 | snap_1024 | 1024 | 1024 | default | 11.570 | 16.336 | 1.662 |
+| 32768 | d01_r0 | 1024 | 1024 | default | 16.871 | 16.336 | 1.662 |
+| 32768 | d0.1_w128_r0 | 1024 | 1024 | default | 12.653 | 16.336 | 1.662 |
+| 32768 | d0.1_w128_r64 | 1024 | 1024 | default | 12.719 | 16.336 | 1.662 |
+| 131072 | full | — | 1024 | default | OOM | — | — |
+| 131072 | snap_1024 | 1024 | 1024 | default | OOM | — | — |
+| 131072 | d01_r0 | 1024 | 1024 | default | OOM | — | — |
+| 131072 | d0.1_w128_r0 | 1024 | 1024 | default | OOM | — | — |
+| 131072 | d0.1_w128_r64 | 1024 | 1024 | default | OOM | — | — |
 
 ## Interpretation
 
