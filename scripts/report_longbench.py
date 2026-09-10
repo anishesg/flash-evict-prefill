@@ -60,6 +60,8 @@ def main():
     for budget in (256, 1024):
         for label in ('d01_r0', 'd0.1_w128_r0', 'd0.1_w128_r64'):
             pairs.append((f'{label}_{budget}', f'snap_{budget}'))
+        pairs += [(f'{label}_{budget}', f'd01_r0_{budget}')
+                  for label in ('d0.1_w128_r0', 'd0.1_w128_r64')]
     pairs += [('d01_r0_256', f'{name}_256') for name in ('value_norm_only', 'uniform_recent')]
     for a, b in pairs:
         if a not in report['methods'] or b not in report['methods']:
@@ -69,15 +71,22 @@ def main():
         rng = np.random.default_rng(42)
         replicates = np.zeros(2000)
         differences = []
+        compared = identical = 0
         for task in tasks:
             ra, rb = records[a][task], records[b][task]
             if ra.keys() != rb.keys():
                 raise ValueError(f'Unpaired records: {task}')
             delta = np.array([ra[i]['score']-rb[i]['score'] for i in sorted(ra)])
+            for example_id in ra:
+                if 'output_ids' in ra[example_id] and 'output_ids' in rb[example_id]:
+                    compared += 1
+                    identical += ra[example_id]['output_ids'] == rb[example_id]['output_ids']
             differences.append(float(delta.mean()))
             replicates += delta[rng.integers(0, len(delta), (2000, len(delta)))].mean(1)/len(tasks)
         report['comparisons'][a+' minus '+b] = dict(macro_difference=statistics.mean(differences),
-                                                  paired_stratified_bootstrap_95ci=np.quantile(replicates, [.025, .975]).tolist())
+            paired_stratified_bootstrap_95ci=np.quantile(replicates, [.025, .975]).tolist(),
+            generation_agreement=dict(compared=compared, identical_token_sequences=identical,
+                                      percent=100*identical/compared if compared else None))
     (root/'SUMMARY.json').write_text(json.dumps(report, indent=2)+'\n')
     title='Full LongBench evaluation' if full_scope else 'LongBench validation subset'
     lines = ['# '+title, '',
@@ -118,7 +127,9 @@ def main():
               'They measure example variability, not variability across new tasks or model training seeds.', '']
     for pair, result in report['comparisons'].items():
         lo, hi = result['paired_stratified_bootstrap_95ci']
-        lines.append(f"- {pair}: {result['macro_difference']:+.2f} points, 95% interval [{lo:+.2f}, {hi:+.2f}].")
+        agreement=result['generation_agreement']
+        extra=f" Identical generations: {agreement['identical_token_sequences']}/{agreement['compared']} ({agreement['percent']:.2f}%)." if agreement['compared'] else ''
+        lines.append(f"- {pair}: {result['macro_difference']:+.2f} points, 95% interval [{lo:+.2f}, {hi:+.2f}]."+extra)
     (root/'SUMMARY.md').write_text('\n'.join(lines)+'\n')
     print(json.dumps(dict(complete=report['complete'], records={m: r['records'] for m, r in report['methods'].items()})), flush=True)
 
