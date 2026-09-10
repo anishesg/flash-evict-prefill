@@ -1,6 +1,6 @@
 # Full LongBench evaluation
 
-Status: in progress. 3 tasks, 3 examples per method, 11 methods.
+Status: complete. 3 tasks, 3 examples per method, 11 methods.
 
 All original test examples are evaluated once with greedy decoding. Task scores use the pinned LongBench author metrics and prescribed generation lengths. Aggregate scores are equal-weight means of task scores. The English/code aggregate covers the 16 tasks excluding the five Chinese tasks. No full-benchmark score is emitted before every requested example is present.
 
@@ -12,17 +12,17 @@ Compatible methods share prefill, and compatible caches batch decoding. MLP chun
 
 | Method | Records | All-task macro | English/code macro | Macro excluding tuning prompts |
 |---|---:|---:|---:|---:|
-| full | 2/3 | pending | pending | pending |
-| snap_256 | 2/3 | pending | pending | pending |
-| d01_r0_256 | 2/3 | pending | pending | pending |
-| d0.1_w128_r0_256 | 2/3 | pending | pending | pending |
-| d0.1_w128_r64_256 | 2/3 | pending | pending | pending |
-| snap_1024 | 2/3 | pending | pending | pending |
-| d01_r0_1024 | 2/3 | pending | pending | pending |
-| d0.1_w128_r0_1024 | 2/3 | pending | pending | pending |
-| d0.1_w128_r64_1024 | 2/3 | pending | pending | pending |
-| value_norm_only_256 | 2/3 | pending | pending | pending |
-| uniform_recent_256 | 2/3 | pending | pending | pending |
+| full | 3/3 | 37.78 | 6.67 | 37.78 |
+| snap_256 | 3/3 | 33.33 | 0.00 | 33.33 |
+| d01_r0_256 | 3/3 | 33.33 | 0.00 | 33.33 |
+| d0.1_w128_r0_256 | 3/3 | 33.33 | 0.00 | 33.33 |
+| d0.1_w128_r64_256 | 3/3 | 33.33 | 0.00 | 33.33 |
+| snap_1024 | 3/3 | 33.33 | 0.00 | 33.33 |
+| d01_r0_1024 | 3/3 | 37.78 | 6.67 | 37.78 |
+| d0.1_w128_r0_1024 | 3/3 | 37.78 | 6.67 | 37.78 |
+| d0.1_w128_r64_1024 | 3/3 | 37.78 | 6.67 | 37.78 |
+| value_norm_only_256 | 3/3 | 0.00 | 0.00 | 0.00 |
+| uniform_recent_256 | 3/3 | 0.00 | 0.00 | 0.00 |
 
 ## Per-task quality
 
@@ -30,9 +30,17 @@ Compatible methods share prefill, and compatible caches batch decoding. MLP chun
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | narrativeqa | 13.33 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 13.33 | 13.33 | 13.33 | 0.00 | 0.00 |
 | qasper | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
-| multifieldqa_zh | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
+| multifieldqa_zh | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 100.00 | 0.00 | 0.00 |
 
 ## Paired comparisons
 
 Pointwise intervals (without a multiple-comparison adjustment) use 2,000 paired bootstrap resamples within each task, with tasks held fixed. They measure example variability, not variability across new tasks or model training seeds.
 
+- d01_r0_256 minus snap_256: +0.00 points, 95% interval [+0.00, +0.00].
+- d0.1_w128_r0_256 minus snap_256: +0.00 points, 95% interval [+0.00, +0.00].
+- d0.1_w128_r64_256 minus snap_256: +0.00 points, 95% interval [+0.00, +0.00].
+- d01_r0_1024 minus snap_1024: +4.44 points, 95% interval [+4.44, +4.44].
+- d0.1_w128_r0_1024 minus snap_1024: +4.44 points, 95% interval [+4.44, +4.44].
+- d0.1_w128_r64_1024 minus snap_1024: +4.44 points, 95% interval [+4.44, +4.44].
+- d01_r0_256 minus value_norm_only_256: +33.33 points, 95% interval [+33.33, +33.33].
+- d01_r0_256 minus uniform_recent_256: +33.33 points, 95% interval [+33.33, +33.33].

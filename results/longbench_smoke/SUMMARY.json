@@ -7,182 +7,250 @@
   ],
   "methods": {
     "full": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 13.333333333333334,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 37.77777777777778,
+      "macro_english16": 6.666666666666667,
+      "macro_excluding_tuned": 37.77777777777778
     },
     "snap_256": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 0,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 33.333333333333336,
+      "macro_english16": 0,
+      "macro_excluding_tuned": 33.333333333333336
     },
     "d01_r0_256": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 0,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 33.333333333333336,
+      "macro_english16": 0,
+      "macro_excluding_tuned": 33.333333333333336
     },
     "d0.1_w128_r0_256": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 0,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 33.333333333333336,
+      "macro_english16": 0,
+      "macro_excluding_tuned": 33.333333333333336
     },
     "d0.1_w128_r64_256": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 0,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 33.333333333333336,
+      "macro_english16": 0,
+      "macro_excluding_tuned": 33.333333333333336
     },
     "snap_1024": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 0,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 33.333333333333336,
+      "macro_english16": 0,
+      "macro_excluding_tuned": 33.333333333333336
     },
     "d01_r0_1024": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 13.333333333333334,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 37.77777777777778,
+      "macro_english16": 6.666666666666667,
+      "macro_excluding_tuned": 37.77777777777778
     },
     "d0.1_w128_r0_1024": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 13.333333333333334,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 37.77777777777778,
+      "macro_english16": 6.666666666666667,
+      "macro_excluding_tuned": 37.77777777777778
     },
     "d0.1_w128_r64_1024": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 13.333333333333334,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 100.0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 37.77777777777778,
+      "macro_english16": 6.666666666666667,
+      "macro_excluding_tuned": 37.77777777777778
     },
     "value_norm_only_256": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 0,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 0,
+      "macro_english16": 0,
+      "macro_excluding_tuned": 0
     },
     "uniform_recent_256": {
-      "complete": false,
-      "records": 2,
+      "complete": true,
+      "records": 3,
       "counts": {
         "narrativeqa": 1,
         "qasper": 1,
-        "multifieldqa_zh": 0
+        "multifieldqa_zh": 1
       },
       "completed_task_scores": {
         "narrativeqa": 0,
-        "qasper": 0
+        "qasper": 0,
+        "multifieldqa_zh": 0
       },
-      "macro_all": null,
-      "macro_english16": null,
-      "macro_excluding_tuned": null
+      "macro_all": 0,
+      "macro_english16": 0,
+      "macro_excluding_tuned": 0
     }
   },
-  "comparisons": {},
-  "complete": false
+  "comparisons": {
+    "d01_r0_256 minus snap_256": {
+      "macro_difference": 0.0,
+      "paired_stratified_bootstrap_95ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "d0.1_w128_r0_256 minus snap_256": {
+      "macro_difference": 0.0,
+      "paired_stratified_bootstrap_95ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "d0.1_w128_r64_256 minus snap_256": {
+      "macro_difference": 0.0,
+      "paired_stratified_bootstrap_95ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "d01_r0_1024 minus snap_1024": {
+      "macro_difference": 4.444444444444445,
+      "paired_stratified_bootstrap_95ci": [
+        4.444444444444445,
+        4.444444444444445
+      ]
+    },
+    "d0.1_w128_r0_1024 minus snap_1024": {
+      "macro_difference": 4.444444444444445,
+      "paired_stratified_bootstrap_95ci": [
+        4.444444444444445,
+        4.444444444444445
+      ]
+    },
+    "d0.1_w128_r64_1024 minus snap_1024": {
+      "macro_difference": 4.444444444444445,
+      "paired_stratified_bootstrap_95ci": [
+        4.444444444444445,
+        4.444444444444445
+      ]
+    },
+    "d01_r0_256 minus value_norm_only_256": {
+      "macro_difference": 33.333333333333336,
+      "paired_stratified_bootstrap_95ci": [
+        33.333333333333336,
+        33.333333333333336
+      ]
+    },
+    "d01_r0_256 minus uniform_recent_256": {
+      "macro_difference": 33.333333333333336,
+      "paired_stratified_bootstrap_95ci": [
+        33.333333333333336,
+        33.333333333333336
+      ]
+    }
+  },
+  "complete": true
 }
