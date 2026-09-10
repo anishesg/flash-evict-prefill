@@ -97,8 +97,11 @@ def main():
     model=json.loads(model_path.read_text()) if model_path.exists() else {}
     chunked_path=root/'model_benchmark_chunked.json'
     chunked=json.loads(chunked_path.read_text()) if chunked_path.exists() else {}
+    expandable_path=root/'model_benchmark_expandable.json'
+    expandable=json.loads(expandable_path.read_text()) if expandable_path.exists() else {}
     report['model_benchmark_complete']=model.get('complete',False)
     report['model_benchmark_chunked_complete']=chunked.get('complete',False)
+    report['model_benchmark_expandable_complete']=expandable.get('complete',False)
     report['requested_tables_complete']=(report['requested_performance_complete'] and
         report['model_benchmark_complete'] and report['model_benchmark_chunked_complete'])
     report['complete']=all(p['complete'] for p in report['policies']) and report['benchmark_complete'] and report['model_benchmark_complete']
@@ -149,15 +152,17 @@ def main():
             'All 28 Qwen layers, BF16 weights, no scoring diagnostics, and immediate per-layer compaction. '
             'Synthetic token sequences measure shape-dependent cost; timings exclude tokenization, the LM head, and decode. '
             'Absolute allocator peaks include weights, caches, attention outputs, and MLP activations.','',
-            'The MLP chunk size is shared by every method within a configuration; zero means the original unchunked MLP. '
+            'The MLP chunk size and allocator setting are shared by every method within a configuration; zero means the original unchunked MLP. '
+            'Expandable means `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`. '
             'OOM is an observed allocation failure, not a missing measurement. Rows with another CUDA process are excluded.','',
-            '| Tokens | Method | Budget | MLP chunk | Median seconds | Absolute peak GiB | Incremental GiB |',
-            '|---:|---|---:|---:|---:|---:|---:|']
-    for measurement in (model,chunked):
+            '| Tokens | Method | Budget | MLP chunk | Allocator | Median seconds | Absolute peak GiB | Incremental GiB |',
+            '|---:|---|---:|---:|---|---:|---:|---:|']
+    for measurement in (model,chunked,expandable):
         for row in measurement.get('rows',[]):
             if row.get('other_compute_pids'):continue
             budget='—' if row['method']=='full' else row['budget']
-            prefix=f"| {row['n']} | {row['method']} | {budget} | {measurement['args']['mlp_chunk_size']} |"
+            allocator='expandable' if measurement is expandable else 'default'
+            prefix=f"| {row['n']} | {row['method']} | {budget} | {measurement['args']['mlp_chunk_size']} | {allocator} |"
             if 'error' in row:lines.append(prefix+' OOM | — | — |')
             else:lines.append(prefix+f" {row['median_seconds']:.3f} | {row['peak_allocated_bytes']/2**30:.3f} | {row['peak_increment_bytes']/2**30:.3f} |")
     lines+=['','## Interpretation','',

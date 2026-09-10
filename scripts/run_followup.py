@@ -5,6 +5,7 @@ in evaluate_longbench.py; benchmark resume lives in benchmark_model.py. This
 driver never terminates other users' processes or changes experiment parameters.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -51,10 +52,22 @@ def main():
             time.sleep(5)
     common = [python, 'scripts/benchmark_model.py', '--policies', 'results/priority_policies.json',
               '--names', 'd01_r0', 'd0.1_w128_r0', 'd0.1_w128_r64', '--require-idle']
-    for name, extra in [('model_benchmark', []), ('model_benchmark_chunked', ['--mlp-chunk-size', '1024'])]:
+    configurations=[('model_benchmark', [], None),
+                    ('model_benchmark_chunked', ['--mlp-chunk-size', '1024'], None),
+                    ('model_benchmark_expandable', ['--mlp-chunk-size', '1024'], 'expandable_segments:True')]
+    for name, extra, allocator in configurations:
         output = f'results/{name}.json'
         while not (Path(output).exists() and json.loads(Path(output).read_text()).get('complete')):
+            if allocator:
+                os.environ['PYTORCH_CUDA_ALLOC_CONF']=allocator
             code = run(common+extra+['--output', output], f'results/{name}.log')
+            if allocator:
+                os.environ.pop('PYTORCH_CUDA_ALLOC_CONF',None)
+                if Path(output).exists():
+                    report=json.loads(Path(output).read_text())
+                    report.update(allocator_configuration=allocator,
+                                  launcher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+                    Path(output).write_text(json.dumps(report,indent=2)+'\n')
             if code:
                 # Retry only explicitly identified GPU contention; other errors
                 # require investigation instead of silently altering the protocol.
