@@ -34,6 +34,10 @@ def main():
     for sweep in ('query_sweep','combined_sweep'):
         manifest=root/sweep/'policies.json'
         if manifest.exists():runs.extend((p['name'],root/sweep/p['name']) for p in json.loads(manifest.read_text()))
+    # Priority reruns finished independently of the larger exploratory sweep.
+    priority=root/'priority_combined'
+    runs=[(name,priority/name if (priority/name/'complete.json').exists() else folder)
+          for name,folder in runs]
     bench_path=root/'policy_benchmark.json'
     benchmark=json.loads(bench_path.read_text()) if bench_path.exists() else {}
     measurements={(r['method'],r['budget'],r['n']):r for r in benchmark.get('rows',[]) if 'error' not in r}
@@ -85,6 +89,9 @@ def main():
     report['target_passes']=[p for p in report['points'] if p['budget']==1024 and p['longbench']>=85 and p['needle']>=85
                               and p['memory_mib'] is not None and p['memory_mib']<1000]
     report['benchmark_complete']=benchmark.get('complete',False)
+    requested=('d01_r0','d0.1_w128_r0','d0.1_w128_r64','snap_w32')
+    report['requested_performance_complete']=all((name,budget,n) in measurements
+        for name in requested for budget in (256,1024) for n in (8192,32768,131072))
     report['benchmark_contended_rows']=sum(bool(r['other_compute_pids']) for r in benchmark.get('rows',[]))
     model_path=root/'model_benchmark.json'
     model=json.loads(model_path.read_text()) if model_path.exists() else {}

@@ -6955,7 +6955,7 @@
     },
     {
       "name": "d0.1_w128_r0",
-      "path": "results/combined_sweep/d0.1_w128_r0",
+      "path": "results/priority_combined/d0.1_w128_r0",
       "scoring": {
         "recency_decay": 0.1,
         "observation_window": 128,
@@ -7158,7 +7158,7 @@
     },
     {
       "name": "d0.1_w128_r64",
-      "path": "results/combined_sweep/d0.1_w128_r64",
+      "path": "results/priority_combined/d0.1_w128_r64",
       "scoring": {
         "recency_decay": 0.1,
         "observation_window": 128,
@@ -8606,8 +8606,8 @@
       "gsm8k": 100.0,
       "mmlu": 75.0,
       "needle": 100.0,
-      "memory_mib": null,
-      "latency_ms": null
+      "memory_mib": 899.0078125,
+      "latency_ms": 2982.96826171875
     },
     {
       "name": "d0.1_w128_r0",
@@ -8616,8 +8616,8 @@
       "gsm8k": 100.0,
       "mmlu": 75.0,
       "needle": 100.0,
-      "memory_mib": null,
-      "latency_ms": null
+      "memory_mib": 899.03125,
+      "latency_ms": 3104.671630859375
     },
     {
       "name": "d0.1_w128_r64",
@@ -8626,8 +8626,8 @@
       "gsm8k": 100.0,
       "mmlu": 75.0,
       "needle": 100.0,
-      "memory_mib": null,
-      "latency_ms": null
+      "memory_mib": 900.2197265625,
+      "latency_ms": 3104.877685546875
     },
     {
       "name": "d0.1_w128_r64",
@@ -8636,8 +8636,8 @@
       "gsm8k": 100.0,
       "mmlu": 75.0,
       "needle": 100.0,
-      "memory_mib": null,
-      "latency_ms": null
+      "memory_mib": 900.2548828125,
+      "latency_ms": 3057.27783203125
     },
     {
       "name": "SnapKV",
@@ -8671,6 +8671,26 @@
         "needle": 100.0,
         "memory_mib": 899.0078125,
         "latency_ms": 5571.1630859375
+      },
+      {
+        "name": "d0.1_w128_r0",
+        "budget": 256,
+        "longbench": 80.55555555555556,
+        "gsm8k": 100.0,
+        "mmlu": 75.0,
+        "needle": 100.0,
+        "memory_mib": 899.0078125,
+        "latency_ms": 2982.96826171875
+      },
+      {
+        "name": "d0.1_w128_r64",
+        "budget": 256,
+        "longbench": 81.25,
+        "gsm8k": 100.0,
+        "mmlu": 75.0,
+        "needle": 100.0,
+        "memory_mib": 900.2197265625,
+        "latency_ms": 3104.877685546875
       }
     ],
     "1024": [
@@ -8683,6 +8703,16 @@
         "needle": 100.0,
         "memory_mib": 899.03125,
         "latency_ms": 5588.1318359375
+      },
+      {
+        "name": "d0.1_w128_r0",
+        "budget": 1024,
+        "longbench": 90.51724137931035,
+        "gsm8k": 100.0,
+        "mmlu": 75.0,
+        "needle": 100.0,
+        "memory_mib": 899.03125,
+        "latency_ms": 3104.671630859375
       },
       {
         "name": "SnapKV",
@@ -8706,9 +8736,30 @@
       "needle": 100.0,
       "memory_mib": 899.03125,
       "latency_ms": 5588.1318359375
+    },
+    {
+      "name": "d0.1_w128_r0",
+      "budget": 1024,
+      "longbench": 90.51724137931035,
+      "gsm8k": 100.0,
+      "mmlu": 75.0,
+      "needle": 100.0,
+      "memory_mib": 899.03125,
+      "latency_ms": 3104.671630859375
+    },
+    {
+      "name": "d0.1_w128_r64",
+      "budget": 1024,
+      "longbench": 90.51724137931035,
+      "gsm8k": 100.0,
+      "mmlu": 75.0,
+      "needle": 100.0,
+      "memory_mib": 900.2548828125,
+      "latency_ms": 3057.27783203125
     }
   ],
   "benchmark_complete": false,
+  "requested_performance_complete": true,
   "benchmark_contended_rows": 0,
   "model_benchmark_complete": false,
   "complete": false

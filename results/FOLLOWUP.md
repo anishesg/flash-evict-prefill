@@ -18,10 +18,10 @@ Memory is peak additional PyTorch allocation for one BF16 attention layer, B=1, 
 |---|---:|---:|---:|---:|---:|---:|---:|
 | d01_r0 | 256 | 80.56 | 100.00 | 75.00 | 100.00 | 899.01 | 5571.16 |
 | d01_r0 | 1024 | 90.52 | 100.00 | 75.00 | 100.00 | 899.03 | 5588.13 |
-| d0.1_w128_r0 | 256 | 80.56 | 100.00 | 75.00 | 100.00 | pending | pending |
-| d0.1_w128_r0 | 1024 | 90.52 | 100.00 | 75.00 | 100.00 | pending | pending |
-| d0.1_w128_r64 | 256 | 81.25 | 100.00 | 75.00 | 100.00 | pending | pending |
-| d0.1_w128_r64 | 1024 | 90.52 | 100.00 | 75.00 | 100.00 | pending | pending |
+| d0.1_w128_r0 | 256 | 80.56 | 100.00 | 75.00 | 100.00 | 899.01 | 2982.97 |
+| d0.1_w128_r0 | 1024 | 90.52 | 100.00 | 75.00 | 100.00 | 899.03 | 3104.67 |
+| d0.1_w128_r64 | 256 | 81.25 | 100.00 | 75.00 | 100.00 | 900.22 | 3104.88 |
+| d0.1_w128_r64 | 1024 | 90.52 | 100.00 | 75.00 | 100.00 | 900.25 | 3057.28 |
 | SnapKV | 256 | 76.19 | 100.00 | 75.00 | 100.00 | 2705.00 | 2151.99 |
 | SnapKV | 1024 | 92.65 | 100.00 | 75.00 | 100.00 | 2705.00 | 2152.68 |
 | full | — | 67.86 | 100.00 | 75.00 | 100.00 | — | — |
@@ -37,10 +37,10 @@ Five warmed CUDA-event samples per measurement; medians below. The process lists
 |---|---:|---:|---:|---:|
 | d01_r0 | 256 | 20.61 | 339.14 | 5571.16 |
 | d01_r0 | 1024 | 20.62 | 341.59 | 5588.13 |
-| d0.1_w128_r0 | 256 | 12.04 | 187.39 | pending |
-| d0.1_w128_r0 | 1024 | 12.04 | 187.34 | pending |
-| d0.1_w128_r64 | 256 | 12.06 | 187.77 | pending |
-| d0.1_w128_r64 | 1024 | 12.07 | 185.87 | pending |
+| d0.1_w128_r0 | 256 | 12.04 | 187.39 | 2982.97 |
+| d0.1_w128_r0 | 1024 | 12.04 | 187.34 | 3104.67 |
+| d0.1_w128_r64 | 256 | 12.06 | 187.77 | 3104.88 |
+| d0.1_w128_r64 | 1024 | 12.07 | 185.87 | 3057.28 |
 | SnapKV | 256 | 8.83 | 129.06 | 2151.99 |
 | SnapKV | 1024 | 8.84 | 129.67 | 2152.68 |
 
@@ -48,8 +48,8 @@ Five warmed CUDA-event samples per measurement; medians below. The process lists
 
 Dominance considers all four quality scores (higher is better) and 131K additional allocation (lower is better). Latency is reported separately. No confidence intervals are inferred from repeated greedy seeds.
 
-- Budget 256: d01_r0
-- Budget 1024: d01_r0, SnapKV
+- Budget 256: d01_r0, d0.1_w128_r0, d0.1_w128_r64
+- Budget 1024: d01_r0, d0.1_w128_r0, SnapKV
 
 ## Whole-model prefill
 

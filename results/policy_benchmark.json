@@ -1076,23 +1076,31 @@
       "compute_processes_before": "134203, /home/qcb/kv-distill/.venv/bin/python, 2362 MiB\n",
       "compute_processes_after": "134203, /home/qcb/kv-distill/.venv/bin/python, 2362 MiB\n",
       "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "d0.1_w128_r0",
+      "budget": 256,
+      "median_ms": 2982.96826171875,
+      "samples_ms": [
+        2974.1435546875,
+        2982.96826171875,
+        2982.506591796875,
+        2986.04638671875,
+        2992.3359375
+      ],
+      "allocated_before_bytes": 1207959552,
+      "peak_allocated_bytes": 2150637568,
+      "peak_increment_bytes": 942678016,
+      "peak_reserved_bytes": 2170552320,
+      "free_device_bytes_before": 22164209664,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "4217, /home/qcb/kv-distill/.venv/bin/python, 1404 MiB\n",
+      "compute_processes_after": "4217, /home/qcb/kv-distill/.venv/bin/python, 2362 MiB\n",
+      "other_compute_pids": []
     }
   ],
   "kernel_resources": [
-    {
-      "hash": "739320e3073f6277c917075d425984b7109b7c7f1f4b12b0b6ac519f231ffaa6",
-      "registers_per_thread": 160,
-      "spills": 0,
-      "shared_bytes": 45056,
-      "global_scratch_bytes": 0
-    },
-    {
-      "hash": "76ed25e15a9e76d0db795482275e08ea0d308fa9ab9003cc943b5aceb9a32377",
-      "registers_per_thread": 160,
-      "spills": 0,
-      "shared_bytes": 45056,
-      "global_scratch_bytes": 0
-    },
     {
       "hash": "3aaa42e2e33dbdfdf232d7c451489fc95cf2b387dfa1ef09d9179ee19a695f9d",
       "registers_per_thread": 160,
