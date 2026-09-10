@@ -95,7 +95,10 @@ def main():
     report['benchmark_contended_rows']=sum(bool(r['other_compute_pids']) for r in benchmark.get('rows',[]))
     model_path=root/'model_benchmark.json'
     model=json.loads(model_path.read_text()) if model_path.exists() else {}
+    chunked_path=root/'model_benchmark_chunked.json'
+    chunked=json.loads(chunked_path.read_text()) if chunked_path.exists() else {}
     report['model_benchmark_complete']=model.get('complete',False)
+    report['model_benchmark_chunked_complete']=chunked.get('complete',False)
     report['complete']=all(p['complete'] for p in report['policies']) and report['benchmark_complete'] and report['model_benchmark_complete']
     if not args.partial and not report['complete']:raise RuntimeError('Benchmarks incomplete')
     (root/'FOLLOWUP.json').write_text(json.dumps(report,indent=2)+'\n')
@@ -139,10 +142,16 @@ def main():
             'All 28 Qwen layers, BF16 weights, no scoring diagnostics, and immediate per-layer compaction. '
             'Synthetic token sequences measure shape-dependent cost; timings exclude tokenization, the LM head, and decode. '
             'Absolute allocator peaks include weights, caches, attention outputs, and MLP activations.','',
-            '| Tokens | Method | Median seconds | Absolute peak GiB | Incremental GiB |','|---:|---|---:|---:|---:|']
-    for row in model.get('rows',[]):
-        if 'error' in row:lines.append(f"| {row['n']} | {row['method']} | OOM | — | — |")
-        else:lines.append(f"| {row['n']} | {row['method']} | {row['median_seconds']:.3f} | {row['peak_allocated_bytes']/2**30:.3f} | {row['peak_increment_bytes']/2**30:.3f} |")
+            'The MLP chunk size is shared by every method within a configuration; zero means the original unchunked MLP. '
+            'OOM is an observed allocation failure, not a missing measurement. Rows with another CUDA process are excluded.','',
+            '| Tokens | Method | Budget | MLP chunk | Median seconds | Absolute peak GiB | Incremental GiB |',
+            '|---:|---|---:|---:|---:|---:|---:|']
+    for measurement in (model,chunked):
+        for row in measurement.get('rows',[]):
+            if row.get('other_compute_pids'):continue
+            prefix=f"| {row['n']} | {row['method']} | {row.get('budget') or '—'} | {measurement['args']['mlp_chunk_size']} |"
+            if 'error' in row:lines.append(prefix+' OOM | — | — |')
+            else:lines.append(prefix+f" {row['median_seconds']:.3f} | {row['peak_allocated_bytes']/2**30:.3f} | {row['peak_increment_bytes']/2**30:.3f} |")
     lines+=['','## Interpretation','',
             'Recency weights are exp(decay * (q - (N-1))) per token, and windowing masks exactly the final w query positions. '
             'Attention outputs use the original online softmax. Scores use its final normalizers in a tiled replay; '

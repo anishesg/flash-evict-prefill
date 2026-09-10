@@ -62,7 +62,7 @@ def main():
     policies.append(dict(name='d01_r0',recency_decay=.1,observation_window=0,
                          value_weighted=True,reserved_recent=0,pool_kernel=1))
     policy_by_name={p['name']:p for p in policies}
-    methods=[dict(name='full',backend='full'),dict(name='snap_1024',backend='snap')]
+    methods=[dict(name='full',backend='full'),dict(name=f'snap_{args.budget}',backend='snap')]
     for name in args.names:
         policy=policy_by_name[name]
         methods.append(dict(name=name,backend='fused',
@@ -81,10 +81,17 @@ def main():
                 scope='28-layer BF16 Qwen-2.5-7B model.model; synthetic tokens; no lm_head or decode; immediate per-layer cache compaction; weights and MLP activations included; optional MLP chunking applies equally to every method',
                 rows=[])
     dest=Path(args.output);dest.parent.mkdir(parents=True,exist_ok=True)
+    if dest.exists():
+        old=json.loads(dest.read_text())
+        for key in ('args','methods','source_sha256'):
+            if old[key]!=report[key]:raise ValueError(f'Resume mismatch: {key}; use a new output path')
+        report=old
+    done={(r['n'],r['method']) for r in report['rows'] if not r['other_compute_pids']}
     for n in args.lengths:
         ids=torch.randint(0,model.config.vocab_size,(1,n),device='cuda')
         for method in methods:
             name=method['name'];kwargs={k:v for k,v in method.items() if k!='name'}
+            if (n,name) in done:continue
             ctl=StreamingController(model,budget=args.budget,**kwargs)
             before,others=processes()
             if args.require_idle and others:raise RuntimeError(f'Other CUDA processes: {others}')
@@ -97,7 +104,8 @@ def main():
             after,others_after=processes()
             row.update(compute_processes_before=before,compute_processes_after=after,
                        other_compute_pids=sorted(set(others+others_after)))
-            report['rows'].append(row);dest.write_text(json.dumps(report,indent=2)+'\n')
+            report['rows']=[r for r in report['rows'] if (r['n'],r['method'])!=(n,name)]+[row]
+            dest.write_text(json.dumps(report,indent=2)+'\n')
             print(json.dumps({k:v for k,v in row.items() if k!='memory_stats'}),flush=True)
             if args.require_idle and row['other_compute_pids']:raise RuntimeError('Contention observed')
         del ids
