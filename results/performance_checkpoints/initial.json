@@ -1,0 +1,884 @@
+{
+  "args": {
+    "policies": "results/all_policies.json",
+    "output": "results/policy_benchmark.json",
+    "lengths": [
+      8192,
+      32768,
+      131072
+    ],
+    "budgets": [
+      256,
+      1024
+    ],
+    "repeats": 5,
+    "require_idle": true
+  },
+  "policies": [
+    {
+      "name": "d01_r0",
+      "recency_decay": 0.1,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w128_r0",
+      "recency_decay": 0.0,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w128_r64",
+      "recency_decay": 0.0,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d001_r0",
+      "recency_decay": 0.01,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d001_r64",
+      "recency_decay": 0.01,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_r0",
+      "recency_decay": 1.0,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_r64",
+      "recency_decay": 1.0,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d01_r64",
+      "recency_decay": 0.1,
+      "observation_window": 0,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w32_r0",
+      "recency_decay": 0.0,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w32_r64",
+      "recency_decay": 0.0,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w64_r0",
+      "recency_decay": 0.0,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w64_r64",
+      "recency_decay": 0.0,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w32_v0_p1_r64",
+      "recency_decay": 0.0,
+      "observation_window": 32,
+      "value_weighted": false,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "w32_v1_p5_r64",
+      "recency_decay": 0.0,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 5
+    },
+    {
+      "name": "w32_v0_p5_r64",
+      "recency_decay": 0.0,
+      "observation_window": 32,
+      "value_weighted": false,
+      "reserved_recent": 64,
+      "pool_kernel": 5
+    },
+    {
+      "name": "w32_v0_p5_r32",
+      "recency_decay": 0.0,
+      "observation_window": 32,
+      "value_weighted": false,
+      "reserved_recent": 32,
+      "pool_kernel": 5
+    },
+    {
+      "name": "d0.01_w32_r0",
+      "recency_decay": 0.01,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.01_w32_r64",
+      "recency_decay": 0.01,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.01_w64_r0",
+      "recency_decay": 0.01,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.01_w64_r64",
+      "recency_decay": 0.01,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.01_w128_r0",
+      "recency_decay": 0.01,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.01_w128_r64",
+      "recency_decay": 0.01,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.1_w32_r0",
+      "recency_decay": 0.1,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.1_w32_r64",
+      "recency_decay": 0.1,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.1_w64_r0",
+      "recency_decay": 0.1,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.1_w64_r64",
+      "recency_decay": 0.1,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.1_w128_r0",
+      "recency_decay": 0.1,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d0.1_w128_r64",
+      "recency_decay": 0.1,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_w32_r0",
+      "recency_decay": 1.0,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_w32_r64",
+      "recency_decay": 1.0,
+      "observation_window": 32,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_w64_r0",
+      "recency_decay": 1.0,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_w64_r64",
+      "recency_decay": 1.0,
+      "observation_window": 64,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_w128_r0",
+      "recency_decay": 1.0,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 0,
+      "pool_kernel": 1
+    },
+    {
+      "name": "d1_w128_r64",
+      "recency_decay": 1.0,
+      "observation_window": 128,
+      "value_weighted": true,
+      "reserved_recent": 64,
+      "pool_kernel": 1
+    }
+  ],
+  "gpu": "NVIDIA A10G",
+  "torch": "2.14.0+cu130",
+  "triton": "3.8.0",
+  "shape": {
+    "batch": 1,
+    "query_heads": 28,
+    "kv_heads": 4,
+    "dim": 128,
+    "dtype": "bfloat16"
+  },
+  "source_sha256": {
+    "flash_evict/prefill.py": "dc36a5cd82ddcf986858e4ad7779290387278c263a5410de7d1cc896c0149f0b",
+    "flash_evict/baselines.py": "2c932ffc3e08909b9367b094b9885202f93c72b19e521336e4456ebe485d406f",
+    "/home/qcb/flash-evict/scripts/benchmark_policies.py": "7d77a40d3edaec8838a3c22009dc0c9f6a3c44c9433917a902ef55dee0755e97",
+    "scripts/benchmark.py": "a0f6fb8add581b7bd03a4566ad6a7454c668799c0fb4fc1b32ccb0f36132d7f3"
+  },
+  "git_revision": "a42a52e392ed85bbfcdcec813ee74441952fee84",
+  "scope": "one layer; incremental PyTorch allocations, inputs/model weights excluded; output, scores, selection included",
+  "rows": [
+    {
+      "n": 8192,
+      "method": "snap_w128",
+      "budget": 256,
+      "median_ms": 10.471424102783203,
+      "samples_ms": [
+        10.472415924072266,
+        10.478591918945312,
+        10.471424102783203,
+        10.466303825378418,
+        10.469375610351562
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 437453824,
+      "peak_increment_bytes": 353436672,
+      "peak_reserved_bytes": 513802240,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 328 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 798 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 8192,
+      "method": "snap_w128",
+      "budget": 1024,
+      "median_ms": 10.502143859863281,
+      "samples_ms": [
+        10.479616165161133,
+        10.502143859863281,
+        10.507264137268066,
+        10.515456199645996,
+        10.466303825378418
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 437453824,
+      "peak_increment_bytes": 353436672,
+      "peak_reserved_bytes": 513802240,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 798 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 798 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 8192,
+      "method": "torch_flash",
+      "budget": null,
+      "median_ms": 7.837696075439453,
+      "samples_ms": [
+        7.837696075439453,
+        7.832575798034668,
+        7.847936153411865,
+        7.805952072143555,
+        7.846879959106445
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 143655936,
+      "peak_increment_bytes": 59638784,
+      "peak_reserved_bytes": 161480704,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 798 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 8192,
+      "method": "d01_r0",
+      "budget": 256,
+      "median_ms": 20.612096786499023,
+      "samples_ms": [
+        20.62131118774414,
+        20.607999801635742,
+        20.609024047851562,
+        20.62233543395996,
+        20.612096786499023
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 142942208,
+      "peak_increment_bytes": 58925056,
+      "peak_reserved_bytes": 161480704,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 8192,
+      "method": "snap_w32",
+      "budget": 256,
+      "median_ms": 8.82688045501709,
+      "samples_ms": [
+        8.79923152923584,
+        8.82688045501709,
+        8.8023042678833,
+        8.89139175415039,
+        8.837120056152344
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 261292544,
+      "peak_increment_bytes": 177275392,
+      "peak_reserved_bytes": 293601280,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 588 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 8192,
+      "method": "triton_attention_only",
+      "budget": null,
+      "median_ms": 9.894911766052246,
+      "samples_ms": [
+        9.90617561340332,
+        9.892831802368164,
+        9.904095649719238,
+        9.890815734863281,
+        9.894911766052246
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 142737408,
+      "peak_increment_bytes": 58720256,
+      "peak_reserved_bytes": 159383552,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 588 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 460 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 8192,
+      "method": "d01_r0",
+      "budget": 1024,
+      "median_ms": 20.62335968017578,
+      "samples_ms": [
+        20.64179229736328,
+        20.62335968017578,
+        20.611072540283203,
+        20.580352783203125,
+        20.635648727416992
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 142974976,
+      "peak_increment_bytes": 58957824,
+      "peak_reserved_bytes": 161480704,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 460 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 8192,
+      "method": "snap_w32",
+      "budget": 1024,
+      "median_ms": 8.842240333557129,
+      "samples_ms": [
+        8.864768028259277,
+        8.842240333557129,
+        8.840191841125488,
+        8.860671997070312,
+        8.8340482711792
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 261292544,
+      "peak_increment_bytes": 177275392,
+      "peak_reserved_bytes": 293601280,
+      "free_device_bytes_before": 23254728704,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 588 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "snap_w32",
+      "budget": 256,
+      "median_ms": 129.06393432617188,
+      "samples_ms": [
+        128.44851684570312,
+        129.05984497070312,
+        129.50221252441406,
+        129.06393432617188,
+        129.6363525390625
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 1019609600,
+      "peak_increment_bytes": 709100032,
+      "peak_reserved_bytes": 1088421888,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 616 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 1346 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "snap_w128",
+      "budget": 256,
+      "median_ms": 137.4556121826172,
+      "samples_ms": [
+        137.4556121826172,
+        137.39418029785156,
+        137.4781494140625,
+        137.23443603515625,
+        137.53138732910156
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 1724253184,
+      "peak_increment_bytes": 1413743616,
+      "peak_reserved_bytes": 1969225728,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 1346 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 2186 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "snap_w32",
+      "budget": 1024,
+      "median_ms": 129.67117309570312,
+      "samples_ms": [
+        129.4899139404297,
+        129.61074829101562,
+        129.75103759765625,
+        129.6742401123047,
+        129.67117309570312
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 1019609600,
+      "peak_increment_bytes": 709100032,
+      "peak_reserved_bytes": 1088421888,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 2186 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 1346 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "snap_w128",
+      "budget": 1024,
+      "median_ms": 137.44741821289062,
+      "samples_ms": [
+        137.0050506591797,
+        137.3450164794922,
+        137.51295471191406,
+        137.52627563476562,
+        137.44741821289062
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 1724253184,
+      "peak_increment_bytes": 1413743616,
+      "peak_reserved_bytes": 1969225728,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 1346 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 2186 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "d01_r0",
+      "budget": 256,
+      "median_ms": 339.1426696777344,
+      "samples_ms": [
+        338.366455078125,
+        339.0033874511719,
+        339.1426696777344,
+        339.82977294921875,
+        340.4697570800781
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 546185216,
+      "peak_increment_bytes": 235675648,
+      "peak_reserved_bytes": 559939584,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 2186 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "d01_r0",
+      "budget": 1024,
+      "median_ms": 341.59002685546875,
+      "samples_ms": [
+        341.4937744140625,
+        341.7835388183594,
+        341.59002685546875,
+        341.80914306640625,
+        341.580810546875
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 546209792,
+      "peak_increment_bytes": 235700224,
+      "peak_reserved_bytes": 559939584,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "torch_flash",
+      "budget": null,
+      "median_ms": 126.49676513671875,
+      "samples_ms": [
+        126.57868957519531,
+        126.49676513671875,
+        126.6493148803711,
+        126.47628784179688,
+        126.1312026977539
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 549061632,
+      "peak_increment_bytes": 238552064,
+      "peak_reserved_bytes": 559939584,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 32768,
+      "method": "triton_attention_only",
+      "budget": null,
+      "median_ms": 165.46713256835938,
+      "samples_ms": [
+        164.8916473388672,
+        165.46713256835938,
+        165.1025848388672,
+        167.69024658203125,
+        167.32159423828125
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 545390592,
+      "peak_increment_bytes": 234881024,
+      "peak_reserved_bytes": 557842432,
+      "free_device_bytes_before": 23032430592,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 840 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "triton_attention_only",
+      "budget": null,
+      "median_ms": 2744.225830078125,
+      "samples_ms": [
+        2718.487548828125,
+        2726.824951171875,
+        2744.599609375,
+        2744.225830078125,
+        2744.58935546875
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 2156003328,
+      "peak_increment_bytes": 939524096,
+      "peak_reserved_bytes": 2168455168,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 1480 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 2376 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "d01_r0",
+      "budget": 1024,
+      "median_ms": 5588.1318359375,
+      "samples_ms": [
+        5567.5322265625,
+        5578.99658203125,
+        5588.1318359375,
+        5592.767578125,
+        5598.97509765625
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 2159181824,
+      "peak_increment_bytes": 942702592,
+      "peak_reserved_bytes": 2170552320,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 2376 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 2378 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "snap_w128",
+      "budget": 1024,
+      "median_ms": 2199.828369140625,
+      "samples_ms": [
+        2194.037841796875,
+        2199.828369140625,
+        2202.904541015625,
+        2202.238037109375,
+        2199.5703125
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 6871450624,
+      "peak_increment_bytes": 5654971392,
+      "peak_reserved_bytes": 7822376960,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 2378 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 7768 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "torch_flash",
+      "budget": null,
+      "median_ms": 2135.688232421875,
+      "samples_ms": [
+        2134.1552734375,
+        2135.688232421875,
+        2140.17236328125,
+        2135.721923828125,
+        2134.042724609375
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 2170684416,
+      "peak_increment_bytes": 954205184,
+      "peak_reserved_bytes": 2185232384,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 7768 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 2392 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "snap_w32",
+      "budget": 1024,
+      "median_ms": 2152.678466796875,
+      "samples_ms": [
+        2155.977783203125,
+        2152.678466796875,
+        2152.342529296875,
+        2153.0859375,
+        2151.61865234375
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 4052877824,
+      "peak_increment_bytes": 2836398592,
+      "peak_reserved_bytes": 4299161600,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 2392 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 4408 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "d01_r0",
+      "budget": 256,
+      "median_ms": 5571.1630859375,
+      "samples_ms": [
+        5574.4267578125,
+        5572.3662109375,
+        5571.1630859375,
+        5570.92138671875,
+        5570.68798828125
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 2159157248,
+      "peak_increment_bytes": 942678016,
+      "peak_reserved_bytes": 2170552320,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 4408 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 2378 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "snap_w32",
+      "budget": 256,
+      "median_ms": 2151.98828125,
+      "samples_ms": [
+        2151.98828125,
+        2153.81201171875,
+        2152.439697265625,
+        2150.8720703125,
+        2151.826416015625
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 4052877824,
+      "peak_increment_bytes": 2836398592,
+      "peak_reserved_bytes": 4299161600,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 2378 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 4408 MiB\n",
+      "other_compute_pids": []
+    },
+    {
+      "n": 131072,
+      "method": "snap_w128",
+      "budget": 256,
+      "median_ms": 2181.085205078125,
+      "samples_ms": [
+        2180.412353515625,
+        2180.22705078125,
+        2183.4013671875,
+        2182.580322265625,
+        2181.085205078125
+      ],
+      "allocated_before_bytes": 1216479232,
+      "peak_allocated_bytes": 6871450624,
+      "peak_increment_bytes": 5654971392,
+      "peak_reserved_bytes": 7822376960,
+      "free_device_bytes_before": 22126460928,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "133660, /home/qcb/kv-distill/.venv/bin/python, 4408 MiB\n",
+      "compute_processes_after": "133660, /home/qcb/kv-distill/.venv/bin/python, 7768 MiB\n",
+      "other_compute_pids": []
+    }
+  ],
+  "kernel_resources": [
+    {
+      "hash": "d39c5109ad620a7e14ed3420bae1903a78ae8f91958123941dc261f3f158e254",
+      "registers_per_thread": 160,
+      "spills": 0,
+      "shared_bytes": 45056,
+      "global_scratch_bytes": 0
+    },
+    {
+      "hash": "09af16d699428c6619a9fef3051b1bd2f78ffdeea3a38a24149acf057b21cfeb",
+      "registers_per_thread": 131,
+      "spills": 0,
+      "shared_bytes": 45056,
+      "global_scratch_bytes": 0
+    },
+    {
+      "hash": "2e62ca4b4e51a23bbc74d59d108bca04a71259c62a0f5390cd3268c61c943053",
+      "registers_per_thread": 160,
+      "spills": 0,
+      "shared_bytes": 45056,
+      "global_scratch_bytes": 0
+    },
+    {
+      "hash": "0ee4876c330f9bdb7c53498f9d4fd50c74b2947fa0b9d50a4c1a857e86530c26",
+      "registers_per_thread": 131,
+      "spills": 0,
+      "shared_bytes": 45056,
+      "global_scratch_bytes": 0
+    },
+    {
+      "hash": "e276176edb2f772b440b6df0626a9529a4233bc3d367914d130129f63a39c7da",
+      "registers_per_thread": 131,
+      "spills": 0,
+      "shared_bytes": 45056,
+      "global_scratch_bytes": 0
+    },
+    {
+      "hash": "0538442a07580f7673c9ddb93e7b6955693132624f71f748d9caf2bb06348068",
+      "registers_per_thread": 160,
+      "spills": 0,
+      "shared_bytes": 45056,
+      "global_scratch_bytes": 0
+    }
+  ],
+  "complete": false
+}

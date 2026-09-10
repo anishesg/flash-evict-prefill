@@ -4,18 +4,38 @@ Research prototype: exact multi-query, value-weighted KV importance without
 materializing the attention matrix. Supports CUDA fp16/bf16, causal/noncausal
 self-attention, GQA, and arbitrary input strides. Inference only.
 
-**Result:** the implementation passes correctness checks and uses linear live
-memory, but the requested all-query top-k policy loses substantial quality to
-SnapKV in the frozen Qwen pilot. Scoring requires a replay and has a latency
-penalty. The proposed first-ever, single-pass, zero-overhead paper claim is not
-supported. See [results](results/REPORT.md) and [the mathematical analysis](RESEARCH_NOTES.md).
+**Query-recency follow-up:** decay 0.1 recovers LongBench from 25.00 to 90.52
+and needle from 11.11% to 100% at budget 1024 in the completed 627-condition
+pilot. Its 131K additional allocation is 899.03 MiB, with 5.59 seconds per
+attention layer on A10G. The window/pinning grid and whole-model measurements
+are in [the follow-up report](results/FOLLOWUP.md). This is adaptive tuning on
+19 prompts, with three repeated greedy runs; quality was tested up to 8K.
+Scoring uses tiled replay inside one kernel launch. See the
+[original uniform-policy results](results/REPORT.md) and
+[mathematical analysis](RESEARCH_NOTES.md) for the original failure and claim boundaries.
 
 ```python
 from flash_evict import evict
-out, importance, indices, eviction_mask = evict(q, k, v, budget=256)
+out, importance, indices, eviction_mask = evict(
+    q, k, v, budget=1024, recency_decay=0.1, reserved_recent=0)
 # q: [B,Hq,N,D], k/v: [B,Hkv,N,D]; True in eviction_mask means evict.
 compressed_k = k.gather(2, indices[..., None].expand(-1, -1, -1, k.shape[-1]))
 ```
+
+Query weights are `exp(recency_decay * (q - (N-1)))`, computed per token.
+`observation_window=128` restricts scoring to the final 128 queries and skips
+the replay for earlier query programs. Both options can be combined. All query
+positions still receive complete attention outputs. `reserved_recent=64`
+keeps the suffix inside the total budget; `pool_kernel=5` enables a separate
+SnapKV-style average-pooling ablation, and `value_weighted=False` removes the
+value norm. Defaults `recency_decay=0, observation_window=0` reproduce the
+historical all-query score.
+
+The optional `StreamingController` in `flash_evict/streaming_adapter.py` compacts
+each layer's stored cache immediately, while passing its full attention output
+to the next layer. It has the same restricted evaluator contract as the original
+adapter. Separate tests compare its cache contents and decode output with
+delayed compaction.
 
 ## What is implemented
 

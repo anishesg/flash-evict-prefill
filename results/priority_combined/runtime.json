@@ -1,0 +1,14 @@
+{
+  "started_unix": 1789074027.4658089,
+  "source_sha256": {
+    "flash_evict/prefill.py": "dc36a5cd82ddcf986858e4ad7779290387278c263a5410de7d1cc896c0149f0b",
+    "flash_evict/kv_distill_adapter.py": "bfe5fa47c85e8e70b83c8b5eff2fbc7b9ef205756fd01a6625abdd4805ce074e",
+    "/home/qcb/flash-evict/scripts/sweep.py": "8a495a7dd6f4819e2a867656a91276844761e17035a94f79e46df8cfe7cfe482",
+    "/home/qcb/kv-distill/kv_distill/engine.py": "b9f0bd8be6cad69399663d8146f0fc7731190bd3987d6156b67a5415a7d6b54a",
+    "/home/qcb/kv-distill/kv_distill/attention.py": "c8e8e64d10f97ace751e0e1643f560509e50abafd5fec62cfa2d7b25d6cfae5f",
+    "/home/qcb/kv-distill/kv_distill/cache.py": "bb10dc402cf33203b13fa916f048ce77d49873d2751b45afc9b65e18fc5f521e",
+    "/home/qcb/kv-distill/kv_distill/metrics.py": "e35ae519ba126d0eb78d509de2ac57073ce483a4122ae06116ab678f0f7d91ce"
+  },
+  "torch": "2.14.0+cu130",
+  "nvidia_smi_before": "Thu Sep 10 21:00:27 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 595.91.07              Driver Version: 595.91.07      CUDA Version: 13.2     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA A10G                    On  |   00000000:00:1E.0 Off |                    0 |\n|  0%   53C    P0             75W /  300W |   15497MiB /  23028MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A          134053      C   ...b/kv-distill/.venv/bin/python      15488MiB |\n+-----------------------------------------------------------------------------------------+\n"
+}

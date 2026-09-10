@@ -1,5 +1,36 @@
 # What the experiment establishes
 
+## Query recency follow-up
+
+The follow-up implements query weights
+
+\[
+u_q=\exp(\delta(q-(N-1)))\,\mathbf{1}[q\ge N-w],\qquad
+I_k=\|v_k\|_1\sum_q u_q\exp(s_{qk}-L_q).
+\]
+
+The window indicator is omitted when `observation_window=0`. Weights apply to
+individual query positions, including ragged boundary tiles, rather than to a
+query block's start. The attention output retains the original online softmax.
+Earlier query programs skip scoring replay when a finite window is selected.
+Recent-token reservation is a separate selection constraint inside the budget.
+
+For exponential weights, truncating to the last w queries discards at most
+`exp(-decay * w)` of the total query-weight mass. At decay 0.1 and w=128 this
+is about 0.000276%, whereas w=32 discards about 4.08%. This bound concerns query
+weights, not generation quality or top-k identity: value norms and score margins
+also matter. It motivates testing a finite scoring window with exponential
+weights after the all-query weighted policy succeeds.
+
+Window scoring adds O(w N d) arithmetic to O(N² d) dense prefill and stores O(N)
+importance scalars. Its local tiles are recomputed using final row normalizers;
+it retains the two-traversal schedule for scored queries. The actual one-layer
+and whole-model measurements are recorded separately in
+[the follow-up report](results/FOLLOWUP.md). Parameters are tuned on the same
+small pilot, so independent quality validation is still needed for a paper.
+
+## Original all-query metric
+
 For a fixed head, the requested score is
 
 \[

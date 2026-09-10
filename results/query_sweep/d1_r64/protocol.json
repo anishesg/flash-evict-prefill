@@ -1,0 +1,70 @@
+{
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "model_revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+  "data_sha256": "ce382e3b73650c44d5c636555e7e9a134823bb3ac46b86f54313fb27b9d9e6fe",
+  "baseline_protocol_sha256": "5b1bee595fb0bcf83926e176314adadddcd6f897a73e596f9e3140761b5eefce",
+  "methods": [
+    "full",
+    "h2o_0.05",
+    "h2o_0.1",
+    "snap_256",
+    "snap_1024",
+    "fused_full",
+    "fused_0.05",
+    "fused_0.1",
+    "fused_0.2",
+    "fused_256",
+    "fused_1024"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "example_ids": [
+    "longbench:narrativeqa:170",
+    "longbench:qasper:47",
+    "longbench:hotpotqa:163",
+    "longbench:passage_retrieval_en:36",
+    "gsm8k:gsm8k:train-5",
+    "gsm8k:gsm8k:train-6",
+    "mmlu:abstract_algebra:validation-7",
+    "mmlu:anatomy:validation-22",
+    "mmlu:astronomy:validation-39",
+    "mmlu:business_ethics:validation-42",
+    "needle:needle:2048-0.1-0-20260911",
+    "needle:needle:2048-0.5-0-20260911",
+    "needle:needle:2048-0.9-0-20260911",
+    "needle:needle:4096-0.1-0-20260911",
+    "needle:needle:4096-0.5-0-20260911",
+    "needle:needle:4096-0.9-0-20260911",
+    "needle:needle:8192-0.1-0-20260911",
+    "needle:needle:8192-0.5-0-20260911",
+    "needle:needle:8192-0.9-0-20260911"
+  ],
+  "generation": "greedy; original max_new_tokens; no sampling",
+  "compression": "top-k with a reserved suffix inside budget; prefill-only; decode cache grows",
+  "scoring": {
+    "recency_decay": 1.0,
+    "observation_window": 0,
+    "value_weighted": true
+  },
+  "selection": {
+    "reserved_recent": 64,
+    "pool_kernel": 1
+  },
+  "scope": "exploratory paired pilot; three seeds are repeats of deterministic decoding",
+  "git_revision": "805056a95182b3a8ce4337898ed7f3686549b353",
+  "kv_distill_revision": "e76f98dc1cce09d6a1af3ca0ce923db0ecb0dd21",
+  "baseline_source": "/home/qcb/flash-evict/results/recency_d01",
+  "baseline_protocol_sha256_reuse": "a6f3178819b2620900daf0708ec74a293a1c06a3acf24ca4fcbc07f0cf856d63",
+  "source_sha256": {
+    "flash_evict/prefill.py": "dc36a5cd82ddcf986858e4ad7779290387278c263a5410de7d1cc896c0149f0b",
+    "flash_evict/kv_distill_adapter.py": "bfe5fa47c85e8e70b83c8b5eff2fbc7b9ef205756fd01a6625abdd4805ce074e",
+    "/home/qcb/flash-evict/scripts/sweep.py": "8a495a7dd6f4819e2a867656a91276844761e17035a94f79e46df8cfe7cfe482",
+    "/home/qcb/kv-distill/kv_distill/engine.py": "b9f0bd8be6cad69399663d8146f0fc7731190bd3987d6156b67a5415a7d6b54a",
+    "/home/qcb/kv-distill/kv_distill/attention.py": "c8e8e64d10f97ace751e0e1643f560509e50abafd5fec62cfa2d7b25d6cfae5f",
+    "/home/qcb/kv-distill/kv_distill/cache.py": "bb10dc402cf33203b13fa916f048ce77d49873d2751b45afc9b65e18fc5f521e",
+    "/home/qcb/kv-distill/kv_distill/metrics.py": "e35ae519ba126d0eb78d509de2ac57073ce483a4122ae06116ab678f0f7d91ce"
+  }
+}
