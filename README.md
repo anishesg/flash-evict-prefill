@@ -68,3 +68,36 @@ noncontiguous inputs, batch size 2, extreme logits, and zero values. Pure top-k
 masks match at 5%, 10%, and 20% on the tested random inputs. Separate unweighted
 checks recover H2O mass and its conservation invariant. This does not guarantee
 identical masks for arbitrarily close scores under finite precision.
+
+Extended validation: 14 tests pass, including analytic 8K/32K/128K cases,
+physical cache compaction and decoding in a small Qwen2 model, and agreement
+between the SnapKV benchmark implementation and the local kv-distill reference.
+To include the optional Qwen adapter tests, use:
+
+```bash
+PYTHONPATH=.:/home/qcb/kv-distill /home/qcb/kv-distill/.venv/bin/python -m pytest -q
+```
+
+## Experiments
+
+```bash
+PYTHONPATH=. /home/qcb/kv-distill/.venv/bin/python scripts/benchmark.py
+PYTHONPATH=. /home/qcb/kv-distill/.venv/bin/python scripts/benchmark.py \
+    --heads 28 --kv-heads 4 --dim 128 --output results/benchmark_qwen.json
+PYTHONPATH=.:/home/qcb/kv-distill /home/qcb/kv-distill/.venv/bin/python scripts/evaluate.py
+/home/qcb/kv-distill/.venv/bin/python scripts/report.py
+```
+
+See [the experimental report](results/REPORT.md) and raw JSON results. GPU
+sharing affected initial measurements; process lists and free-memory readings
+are retained, and these timings must not be presented as exclusive-device results.
+Qwen evaluation uses the existing frozen pilot data, model revision, baseline
+cache lifecycle, and metrics. The default selects a small, explicitly frozen
+19-prompt exploratory subset; `--full-pilot` in a new output directory runs all
+118 prompts. Partial reports clearly state incomplete record counts.
+
+The adapter is optional and leaves `/home/qcb/kv-distill` unchanged. It accepts
+only that evaluator's unpadded, single-prompt, contiguous-position prefill flow;
+it is not a general Transformers attention backend. Fused policies retain pure
+top-k prompt entries per KV head and let the decode cache grow, matching the
+prefill-only compression lifecycle of SnapKV. H2O continues dynamic eviction.

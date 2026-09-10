@@ -68,6 +68,10 @@ def test_normalization_counterexample():
     prematurely_summed=logits.exp().sum(0)
     assert torch.allclose(normalized,torch.tensor([.6,1.4]))
     assert not torch.allclose(normalized,prematurely_summed/prematurely_summed.sum()*2)
+    causal_logits=torch.tensor([[math.log(9.),-torch.inf],[math.log(100.),math.log(200.)]])
+    # Omitting per-query denominators can even reverse the top-1 eviction mask.
+    assert causal_logits.softmax(-1).sum(0).argmax()==0
+    assert causal_logits.exp().sum(0).argmax()==1
 
 
 def test_selection_contract():
@@ -78,3 +82,21 @@ def test_selection_contract():
     for budget in (0,21,True,2.5):
         with pytest.raises(ValueError): select_tokens(scores,budget)
     with pytest.raises(ValueError): select_tokens(scores,2,recent=3)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required")
+@pytest.mark.parametrize('n',[8192,32768,131072])
+def test_long_uniform_analytic(n):
+    # Q=K=0 gives a closed-form exact oracle at long lengths without N² HBM.
+    # P[q,k]=1/(q+1) for k<=q; output is a running value mean and importance
+    # is a reverse harmonic sum, multiplied by the value norm and GQA groups.
+    q=torch.zeros(1,2,n,16,device='cuda',dtype=torch.bfloat16)
+    k=torch.zeros(1,1,n,16,device='cuda',dtype=q.dtype)
+    v=torch.randn_like(k)
+    out,scores=prefill(q,k,v)
+    positions=torch.arange(1,n+1,device='cuda',dtype=torch.float64)
+    expected_out=(v.double().cumsum(2)/positions[None,None,:,None]).expand_as(out)
+    harmonic=positions.reciprocal().flip(0).cumsum(0).flip(0)
+    expected_scores=(v.double().abs().sum(-1)*harmonic*2).float()
+    torch.testing.assert_close(out.float(),expected_out.float(),atol=.008,rtol=.008)
+    torch.testing.assert_close(scores,expected_scores,atol=.002,rtol=.0003)

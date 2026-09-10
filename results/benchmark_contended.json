@@ -1,0 +1,366 @@
+{
+  "args": {
+    "lengths": [
+      8192,
+      32768,
+      131072
+    ],
+    "heads": 4,
+    "kv_heads": 2,
+    "dim": 64,
+    "repeats": 5,
+    "output": "results/benchmark.json"
+  },
+  "gpu": "NVIDIA A10G",
+  "torch": "2.14.0+cu130",
+  "triton": "3.8.0",
+  "dtype": "bfloat16",
+  "batch": 1,
+  "git_revision": "03e65da7f9cd6a680b51965b799cc62acedc464f",
+  "nvidia_smi_before": "Thu Sep 10 17:05:16 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 595.91.07              Driver Version: 595.91.07      CUDA Version: 13.2     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA A10G                    On  |   00000000:00:1E.0 Off |                    0 |\n|  0%   58C    P0            147W /  300W |   18703MiB /  23028MiB |     72%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A          126630      C   VLLM::EngineCore                      18694MiB |\n+-----------------------------------------------------------------------------------------+\n",
+  "scope": "single attention layer; allocations include output and selection, exclude inputs",
+  "rows": [
+    {
+      "n": 8192,
+      "method": "torch_flash",
+      "budget": 820,
+      "median_ms": 0.9318400025367737,
+      "samples_ms": [
+        0.9707520008087158,
+        0.9318400025367737,
+        0.894976019859314,
+        0.9431040287017822,
+        0.9277439713478088
+      ],
+      "allocated_before_bytes": 8388608,
+      "peak_allocated_bytes": 12715008,
+      "peak_increment_bytes": 4326400,
+      "peak_reserved_bytes": 23068672,
+      "free_device_bytes_before": 3785490432,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 8192,
+      "method": "flash_snap_w128",
+      "budget": 820,
+      "median_ms": 1.3987840414047241,
+      "samples_ms": [
+        1.3987840414047241,
+        1.4305280447006226,
+        1.385472059249878,
+        1.3895679712295532,
+        1.4202879667282104
+      ],
+      "allocated_before_bytes": 16908288,
+      "peak_allocated_bytes": 59114496,
+      "peak_increment_bytes": 42206208,
+      "peak_reserved_bytes": 77594624,
+      "free_device_bytes_before": 3705798656,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 8192,
+      "method": "triton_attention_only",
+      "budget": 820,
+      "median_ms": 0.7915520071983337,
+      "samples_ms": [
+        0.8069120049476624,
+        0.7915520071983337,
+        0.7567359805107117,
+        0.7936000227928162,
+        0.7608320116996765
+      ],
+      "allocated_before_bytes": 16908288,
+      "peak_allocated_bytes": 21102592,
+      "peak_increment_bytes": 4194304,
+      "peak_reserved_bytes": 41943040,
+      "free_device_bytes_before": 3705798656,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 8192,
+      "method": "fused_replay_topk",
+      "budget": 820,
+      "median_ms": 1.486847996711731,
+      "samples_ms": [
+        1.7131520509719849,
+        1.4643199443817139,
+        1.4878720045089722,
+        1.486847996711731,
+        1.4458880424499512
+      ],
+      "allocated_before_bytes": 16908288,
+      "peak_allocated_bytes": 21214720,
+      "peak_increment_bytes": 4306432,
+      "peak_reserved_bytes": 44040192,
+      "free_device_bytes_before": 3705798656,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 8192,
+      "method": "fused_replay_scores",
+      "budget": 820,
+      "median_ms": 1.351680040359497,
+      "samples_ms": [
+        3.7119998931884766,
+        1.371135950088501,
+        1.3445119857788086,
+        1.351680040359497,
+        1.3475840091705322
+      ],
+      "allocated_before_bytes": 16908288,
+      "peak_allocated_bytes": 21168128,
+      "peak_increment_bytes": 4259840,
+      "peak_reserved_bytes": 44040192,
+      "free_device_bytes_before": 3705798656,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 8192,
+      "method": "flash_snap_w32",
+      "budget": 820,
+      "median_ms": 1.1694079637527466,
+      "samples_ms": [
+        1.1274240016937256,
+        1.1694079637527466,
+        1.1724799871444702,
+        1.176576018333435,
+        1.1325440406799316
+      ],
+      "allocated_before_bytes": 16908288,
+      "peak_allocated_bytes": 33948160,
+      "peak_increment_bytes": 17039872,
+      "peak_reserved_bytes": 44040192,
+      "free_device_bytes_before": 3705798656,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 32768,
+      "method": "flash_snap_w128",
+      "budget": 3277,
+      "median_ms": 20.07244873046875,
+      "samples_ms": [
+        20.24550437927246,
+        20.596736907958984,
+        20.07244873046875,
+        20.05708885192871,
+        19.748863220214844
+      ],
+      "allocated_before_bytes": 42074112,
+      "peak_allocated_bytes": 210895872,
+      "peak_increment_bytes": 168821760,
+      "peak_reserved_bytes": 262144000,
+      "free_device_bytes_before": 3689021440,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 32768,
+      "method": "triton_attention_only",
+      "budget": 3277,
+      "median_ms": 22.0948486328125,
+      "samples_ms": [
+        22.222848892211914,
+        22.0948486328125,
+        19.661823272705078,
+        21.981184005737305,
+        22.391807556152344
+      ],
+      "allocated_before_bytes": 42074112,
+      "peak_allocated_bytes": 58851328,
+      "peak_increment_bytes": 16777216,
+      "peak_reserved_bytes": 75497472,
+      "free_device_bytes_before": 3689021440,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 32768,
+      "method": "fused_replay_scores",
+      "budget": 3277,
+      "median_ms": 39.660545349121094,
+      "samples_ms": [
+        39.82950210571289,
+        39.595008850097656,
+        40.055809020996094,
+        39.660545349121094,
+        39.60319900512695
+      ],
+      "allocated_before_bytes": 42074112,
+      "peak_allocated_bytes": 59113472,
+      "peak_increment_bytes": 17039360,
+      "peak_reserved_bytes": 77594624,
+      "free_device_bytes_before": 3689021440,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 32768,
+      "method": "fused_replay_topk",
+      "budget": 3277,
+      "median_ms": 34.83647918701172,
+      "samples_ms": [
+        34.42790222167969,
+        36.25062561035156,
+        34.63782501220703,
+        34.905086517333984,
+        34.83647918701172
+      ],
+      "allocated_before_bytes": 42074112,
+      "peak_allocated_bytes": 59298304,
+      "peak_increment_bytes": 17224192,
+      "peak_reserved_bytes": 77594624,
+      "free_device_bytes_before": 3689021440,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 32768,
+      "method": "torch_flash",
+      "budget": 3277,
+      "median_ms": 17.479679107666016,
+      "samples_ms": [
+        17.65990447998047,
+        17.550336837768555,
+        15.735808372497559,
+        17.479679107666016,
+        17.44384002685547
+      ],
+      "allocated_before_bytes": 42074112,
+      "peak_allocated_bytes": 59376640,
+      "peak_increment_bytes": 17302528,
+      "peak_reserved_bytes": 77594624,
+      "free_device_bytes_before": 3689021440,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 32768,
+      "method": "flash_snap_w32",
+      "budget": 3277,
+      "median_ms": 18.915327072143555,
+      "samples_ms": [
+        18.915327072143555,
+        18.992128372192383,
+        19.017696380615234,
+        18.569215774536133,
+        18.495487213134766
+      ],
+      "allocated_before_bytes": 42074112,
+      "peak_allocated_bytes": 110232064,
+      "peak_increment_bytes": 68157952,
+      "peak_reserved_bytes": 127926272,
+      "free_device_bytes_before": 3689021440,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 131072,
+      "method": "fused_replay_scores",
+      "budget": 13108,
+      "median_ms": 560.0338134765625,
+      "samples_ms": [
+        560.0338134765625,
+        563.5266723632812,
+        561.59130859375,
+        558.1957397460938,
+        559.5924682617188
+      ],
+      "allocated_before_bytes": 142737408,
+      "peak_allocated_bytes": 210894848,
+      "peak_increment_bytes": 68157440,
+      "peak_reserved_bytes": 224395264,
+      "free_device_bytes_before": 3592552448,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 131072,
+      "method": "flash_snap_w128",
+      "budget": 13108,
+      "median_ms": 280.875,
+      "samples_ms": [
+        277.85113525390625,
+        281.9952697753906,
+        280.875,
+        279.7834167480469,
+        282.4314880371094
+      ],
+      "allocated_before_bytes": 142737408,
+      "peak_allocated_bytes": 818021376,
+      "peak_increment_bytes": 675283968,
+      "peak_reserved_bytes": 964689920,
+      "free_device_bytes_before": 3592552448,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 131072,
+      "method": "triton_attention_only",
+      "budget": 13108,
+      "median_ms": 316.4549255371094,
+      "samples_ms": [
+        314.7642822265625,
+        316.4549255371094,
+        313.754638671875,
+        318.877685546875,
+        316.9034118652344
+      ],
+      "allocated_before_bytes": 142737408,
+      "peak_allocated_bytes": 209846272,
+      "peak_increment_bytes": 67108864,
+      "peak_reserved_bytes": 222298112,
+      "free_device_bytes_before": 3592552448,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 131072,
+      "method": "fused_replay_topk",
+      "budget": 13108,
+      "median_ms": 580.2445068359375,
+      "samples_ms": [
+        577.375244140625,
+        579.2982788085938,
+        580.2445068359375,
+        580.4523315429688,
+        581.7733154296875
+      ],
+      "allocated_before_bytes": 142737408,
+      "peak_allocated_bytes": 212598272,
+      "peak_increment_bytes": 69860864,
+      "peak_reserved_bytes": 226492416,
+      "free_device_bytes_before": 3592552448,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 131072,
+      "method": "flash_snap_w32",
+      "budget": 13108,
+      "median_ms": 278.2484436035156,
+      "samples_ms": [
+        278.9560241699219,
+        276.1492614746094,
+        277.8849182128906,
+        278.2484436035156,
+        278.29248046875
+      ],
+      "allocated_before_bytes": 142737408,
+      "peak_allocated_bytes": 415367680,
+      "peak_increment_bytes": 272630272,
+      "peak_reserved_bytes": 461373440,
+      "free_device_bytes_before": 3592552448,
+      "total_device_bytes": 23686938624
+    },
+    {
+      "n": 131072,
+      "method": "torch_flash",
+      "budget": 13108,
+      "median_ms": 271.2985534667969,
+      "samples_ms": [
+        271.2985534667969,
+        270.5960998535156,
+        271.73583984375,
+        271.0271911621094,
+        271.3395080566406
+      ],
+      "allocated_before_bytes": 142737408,
+      "peak_allocated_bytes": 211944448,
+      "peak_increment_bytes": 69207040,
+      "peak_reserved_bytes": 224395264,
+      "free_device_bytes_before": 3592552448,
+      "total_device_bytes": 23686938624
+    }
+  ]
+}

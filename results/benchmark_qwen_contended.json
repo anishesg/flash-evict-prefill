@@ -1,0 +1,275 @@
+{
+  "args": {
+    "lengths": [
+      8192,
+      32768
+    ],
+    "heads": 28,
+    "kv_heads": 4,
+    "dim": 128,
+    "repeats": 5,
+    "output": "results/benchmark_qwen_contended.json"
+  },
+  "gpu": "NVIDIA A10G",
+  "torch": "2.14.0+cu130",
+  "triton": "3.8.0",
+  "dtype": "bfloat16",
+  "batch": 1,
+  "git_revision": "03e65da7f9cd6a680b51965b799cc62acedc464f",
+  "nvidia_smi_before": "Thu Sep 10 17:08:35 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 595.91.07              Driver Version: 595.91.07      CUDA Version: 13.2     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA A10G                    On  |   00000000:00:1E.0 Off |                    0 |\n|  0%   56C    P0            132W /  300W |   19611MiB /  23028MiB |     59%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A          127486      C   VLLM::EngineCore                      19602MiB |\n+-----------------------------------------------------------------------------------------+\n",
+  "scope": "single attention layer; allocations include output and selection, exclude inputs",
+  "rows": [
+    {
+      "n": 8192,
+      "method": "torch_flash",
+      "budget": 820,
+      "median_ms": 13.104127883911133,
+      "samples_ms": [
+        13.104127883911133,
+        13.07033634185791,
+        13.683712005615234,
+        13.880319595336914,
+        13.080575942993164
+      ],
+      "allocated_before_bytes": 75497472,
+      "peak_allocated_bytes": 135136256,
+      "peak_increment_bytes": 59638784,
+      "peak_reserved_bytes": 140509184,
+      "free_device_bytes_before": 2774663168,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 328 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 386 MiB\n"
+    },
+    {
+      "n": 8192,
+      "method": "flash_snap_w128",
+      "budget": 820,
+      "median_ms": 20.999168395996094,
+      "samples_ms": [
+        20.986879348754883,
+        20.999168395996094,
+        21.05241584777832,
+        20.797439575195312,
+        21.10259246826172
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 437453824,
+      "peak_increment_bytes": 353436672,
+      "peak_reserved_bytes": 513802240,
+      "free_device_bytes_before": 2694971392,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 386 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 798 MiB\n"
+    },
+    {
+      "n": 8192,
+      "method": "triton_attention_only",
+      "budget": 820,
+      "median_ms": 16.918527603149414,
+      "samples_ms": [
+        17.662975311279297,
+        15.739904403686523,
+        18.86720085144043,
+        16.918527603149414,
+        16.279552459716797
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 142737408,
+      "peak_increment_bytes": 58720256,
+      "peak_reserved_bytes": 159383552,
+      "free_device_bytes_before": 2694971392,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 798 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 460 MiB\n"
+    },
+    {
+      "n": 8192,
+      "method": "fused_replay_topk",
+      "budget": 820,
+      "median_ms": 35.957054138183594,
+      "samples_ms": [
+        36.208641052246094,
+        35.911678314208984,
+        38.06515121459961,
+        35.911678314208984,
+        35.957054138183594
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 142960640,
+      "peak_increment_bytes": 58943488,
+      "peak_reserved_bytes": 161480704,
+      "free_device_bytes_before": 2694971392,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 460 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n"
+    },
+    {
+      "n": 8192,
+      "method": "fused_replay_scores",
+      "budget": 820,
+      "median_ms": 36.03865432739258,
+      "samples_ms": [
+        36.03865432739258,
+        36.750335693359375,
+        35.582977294921875,
+        35.69152069091797,
+        36.05094528198242
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 142868480,
+      "peak_increment_bytes": 58851328,
+      "peak_reserved_bytes": 161480704,
+      "free_device_bytes_before": 2694971392,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n"
+    },
+    {
+      "n": 8192,
+      "method": "flash_snap_w32",
+      "budget": 820,
+      "median_ms": 16.924671173095703,
+      "samples_ms": [
+        16.924671173095703,
+        15.09068775177002,
+        17.0250244140625,
+        15.097855567932129,
+        17.035263061523438
+      ],
+      "allocated_before_bytes": 84017152,
+      "peak_allocated_bytes": 261292544,
+      "peak_increment_bytes": 177275392,
+      "peak_reserved_bytes": 293601280,
+      "free_device_bytes_before": 2694971392,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 462 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 588 MiB\n"
+    },
+    {
+      "n": 32768,
+      "method": "flash_snap_w128",
+      "budget": 3277,
+      "median_ms": 249.14125061035156,
+      "samples_ms": [
+        262.6580505371094,
+        249.85292053222656,
+        247.4270782470703,
+        249.14125061035156,
+        248.22886657714844
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 1724253184,
+      "peak_increment_bytes": 1413743616,
+      "peak_reserved_bytes": 1969225728,
+      "free_device_bytes_before": 2472673280,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 616 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 2186 MiB\n"
+    },
+    {
+      "n": 32768,
+      "method": "triton_attention_only",
+      "budget": 3277,
+      "median_ms": 294.12353515625,
+      "samples_ms": [
+        290.0715637207031,
+        291.4396057128906,
+        295.85919189453125,
+        294.12353515625,
+        297.4873962402344
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 545390592,
+      "peak_increment_bytes": 234881024,
+      "peak_reserved_bytes": 557842432,
+      "free_device_bytes_before": 2472673280,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 2186 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 840 MiB\n"
+    },
+    {
+      "n": 32768,
+      "method": "fused_replay_scores",
+      "budget": 3277,
+      "median_ms": 577.6619262695312,
+      "samples_ms": [
+        581.6719360351562,
+        576.8642578125,
+        577.6619262695312,
+        576.1812744140625,
+        579.44677734375
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 545914880,
+      "peak_increment_bytes": 235405312,
+      "peak_reserved_bytes": 559939584,
+      "free_device_bytes_before": 2472673280,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 840 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n"
+    },
+    {
+      "n": 32768,
+      "method": "fused_replay_topk",
+      "budget": 3277,
+      "median_ms": 579.019775390625,
+      "samples_ms": [
+        576.0911254882812,
+        580.8466186523438,
+        588.3299560546875,
+        579.019775390625,
+        575.9498291015625
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 546281984,
+      "peak_increment_bytes": 235772416,
+      "peak_reserved_bytes": 559939584,
+      "free_device_bytes_before": 2472673280,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n"
+    },
+    {
+      "n": 32768,
+      "method": "torch_flash",
+      "budget": 3277,
+      "median_ms": 221.88543701171875,
+      "samples_ms": [
+        222.08717346191406,
+        217.42938232421875,
+        226.55999755859375,
+        219.5095977783203,
+        221.88543701171875
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 549061632,
+      "peak_increment_bytes": 238552064,
+      "peak_reserved_bytes": 559939584,
+      "free_device_bytes_before": 2472673280,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n"
+    },
+    {
+      "n": 32768,
+      "method": "flash_snap_w32",
+      "budget": 3277,
+      "median_ms": 244.14617919921875,
+      "samples_ms": [
+        244.14617919921875,
+        231.57656860351562,
+        238.89511108398438,
+        244.8721923828125,
+        259.28704833984375
+      ],
+      "allocated_before_bytes": 310509568,
+      "peak_allocated_bytes": 1019609600,
+      "peak_increment_bytes": 709100032,
+      "peak_reserved_bytes": 1088421888,
+      "free_device_bytes_before": 2472673280,
+      "total_device_bytes": 23686938624,
+      "compute_processes_before": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 842 MiB\n",
+      "compute_processes_after": "127486, VLLM::EngineCore, 19602 MiB\n127778, /home/qcb/kv-distill/.venv/bin/python, 1346 MiB\n"
+    }
+  ]
+}
