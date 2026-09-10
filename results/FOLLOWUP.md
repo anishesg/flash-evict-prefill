@@ -2,7 +2,7 @@
 
 Requested performance tables: complete. The larger historical exploratory grid remains partial.
 
-The separate full 21-task evaluation is documented in [LONGBENCH_PLAN.md](LONGBENCH_PLAN.md); its coverage and scores are written to `longbench_full/SUMMARY.md` as the campaign runs. The quality tables below retain the earlier adaptive pilot.
+The separate full 21-task evaluation is documented in [LONGBENCH_PLAN.md](LONGBENCH_PLAN.md); its [coverage and scores](longbench_full/SUMMARY.md) are updated as the campaign runs. The quality tables below retain the earlier adaptive pilot.
 
 Quality uses the same 19 prompts (4 LongBench, 2 GSM8K, 4 MMLU, 9 needle) and three greedy repetitions. Parameters were tuned on these prompts; these results do not establish held-out benchmark quality. Quality prompts are at most 8192 tokens. The 131K measurements use synthetic inputs and do not measure answer quality at that length.
 
@@ -106,6 +106,9 @@ The MLP chunk size and allocator setting are shared by every method within a con
 | 131072 | d01_r0 | 1024 | 1024 | expandable | OOM | — | — |
 | 131072 | d0.1_w128_r0 | 1024 | 1024 | expandable | OOM | — | — |
 | 131072 | d0.1_w128_r64 | 1024 | 1024 | expandable | OOM | — | — |
+
+The completed performance comparison is available as a [PDF figure](followup_performance.pdf) and [PNG](followup_performance.png). One-layer additional allocations and whole-model absolute peaks are shown separately.
+
 
 ## Interpretation
 

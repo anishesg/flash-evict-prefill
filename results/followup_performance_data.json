@@ -1,0 +1,87 @@
+{
+  "kernel": [
+    {
+      "n": 131072,
+      "method": "snap_w32",
+      "budget": 1024,
+      "median_ms": 2152.678466796875,
+      "peak_increment_bytes": 2836398592
+    },
+    {
+      "n": 131072,
+      "method": "d01_r0",
+      "budget": 1024,
+      "median_ms": 5588.1318359375,
+      "peak_increment_bytes": 942702592
+    },
+    {
+      "n": 131072,
+      "method": "d0.1_w128_r0",
+      "budget": 1024,
+      "median_ms": 3104.671630859375,
+      "peak_increment_bytes": 942702592
+    },
+    {
+      "n": 131072,
+      "method": "d0.1_w128_r64",
+      "budget": 1024,
+      "median_ms": 3057.27783203125,
+      "peak_increment_bytes": 943985664
+    }
+  ],
+  "whole_model": [
+    {
+      "n": 32768,
+      "method": "full",
+      "budget": null,
+      "median_seconds": 11.438413643000104,
+      "peak_allocated_bytes": 19295921152
+    },
+    {
+      "n": 32768,
+      "method": "snap_1024",
+      "budget": 1024,
+      "median_seconds": 11.570157575999929,
+      "peak_allocated_bytes": 17540604928
+    },
+    {
+      "n": 32768,
+      "method": "d01_r0",
+      "budget": 1024,
+      "median_seconds": 16.871095109999942,
+      "peak_allocated_bytes": 17540604928
+    },
+    {
+      "n": 32768,
+      "method": "d0.1_w128_r0",
+      "budget": 1024,
+      "median_seconds": 12.653295398999944,
+      "peak_allocated_bytes": 17540604928
+    },
+    {
+      "n": 32768,
+      "method": "d0.1_w128_r64",
+      "budget": 1024,
+      "median_seconds": 12.718664346999958,
+      "peak_allocated_bytes": 17540604928
+    }
+  ],
+  "whole_model_configuration": {
+    "lengths": [
+      8192,
+      32768,
+      131072
+    ],
+    "budget": 1024,
+    "repeats": 3,
+    "policies": "results/priority_policies.json",
+    "names": [
+      "d01_r0",
+      "d0.1_w128_r0",
+      "d0.1_w128_r64"
+    ],
+    "output": "results/model_benchmark_chunked.json",
+    "require_idle": true,
+    "mlp_chunk_size": 1024
+  }
+}

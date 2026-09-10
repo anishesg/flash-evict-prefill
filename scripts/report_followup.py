@@ -111,7 +111,7 @@ def main():
             '. The larger historical exploratory grid remains '+('complete' if report['complete'] else 'partial')+'.')
     lines=['# Query recency and observation-window follow-up','',status,'',
            'The separate full 21-task evaluation is documented in [LONGBENCH_PLAN.md](LONGBENCH_PLAN.md); '
-           'its coverage and scores are written to `longbench_full/SUMMARY.md` as the campaign runs. '
+           'its [coverage and scores](longbench_full/SUMMARY.md) are updated as the campaign runs. '
            'The quality tables below retain the earlier adaptive pilot.','',
            'Quality uses the same 19 prompts (4 LongBench, 2 GSM8K, 4 MMLU, 9 needle) and three greedy repetitions. '
            'Parameters were tuned on these prompts; these results do not establish held-out benchmark quality. '
@@ -165,6 +165,10 @@ def main():
             prefix=f"| {row['n']} | {row['method']} | {budget} | {measurement['args']['mlp_chunk_size']} | {allocator} |"
             if 'error' in row:lines.append(prefix+' OOM | — | — |')
             else:lines.append(prefix+f" {row['median_seconds']:.3f} | {row['peak_allocated_bytes']/2**30:.3f} | {row['peak_increment_bytes']/2**30:.3f} |")
+    if (root/'followup_performance.pdf').exists():
+        lines+=['','The completed performance comparison is available as a [PDF figure](followup_performance.pdf) '
+                'and [PNG](followup_performance.png). One-layer additional allocations and whole-model absolute peaks '
+                'are shown separately.','']
     lines+=['','## Interpretation','',
             'Recency weights are exp(decay * (q - (N-1))) per token, and windowing masks exactly the final w query positions. '
             'Attention outputs use the original online softmax. Scores use its final normalizers in a tiled replay; '
