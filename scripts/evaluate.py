@@ -48,6 +48,11 @@ def main():
     p.add_argument('--methods',nargs='+',default=METHODS,choices=METHODS)
     p.add_argument('--full-pilot',action='store_true')
     p.add_argument('--prepare-only',action='store_true')
+    p.add_argument('--recency-decay',type=float,default=0.)
+    p.add_argument('--observation-window',type=int,default=0)
+    p.add_argument('--reserved-recent',type=int,default=0)
+    p.add_argument('--pool-kernel',type=int,default=1)
+    p.add_argument('--no-value-weighted',action='store_true')
     args=p.parse_args()
     dest=Path(args.output);dest.mkdir(parents=True,exist_ok=True)
     rows=select_rows(json.loads(Path(args.data).read_text()),args.full_pilot)
@@ -55,14 +60,17 @@ def main():
             "baseline_protocol_sha256":sha('/home/qcb/kv-distill/PROTOCOL.md'),
             "methods":args.methods,"seeds":args.seeds,"example_ids":[r['id'] for r in rows],
             "generation":"greedy; original max_new_tokens; no sampling",
-            "compression":"pure top-k fused scores per KV head; prefill-only; decode cache grows",
+            "compression":"top-k with a reserved suffix inside budget; prefill-only; decode cache grows",
+            "scoring":{"recency_decay":args.recency_decay,"observation_window":args.observation_window,
+                       "value_weighted":not args.no_value_weighted},
+            "selection":{"reserved_recent":args.reserved_recent,"pool_kernel":args.pool_kernel},
             "scope":"exploratory paired pilot; three seeds are repeats of deterministic decoding",
             "git_revision":subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             "kv_distill_revision":subprocess.check_output(['git','-C','/home/qcb/kv-distill','rev-parse','HEAD'],text=True).strip()}
     config_path=dest/'protocol.json'
     if config_path.exists():
         prior=json.loads(config_path.read_text())
-        for key in ('model_revision','data_sha256','methods','seeds','example_ids','generation','compression'):
+        for key in ('model_revision','data_sha256','methods','seeds','example_ids','generation','compression','scoring','selection'):
             if prior[key]!=config[key]:raise ValueError(f'Protocol mismatch: {key}; use a new output directory')
     else:config_path.write_text(json.dumps(config,indent=2)+'\n')
     print(json.dumps({'event':'protocol_frozen','examples':len(rows),'methods':args.methods}),flush=True)
@@ -90,6 +98,9 @@ def main():
     model,tokenizer=load_model()
     engine=Engine(model,tokenizer)
     engine.ctl.close();engine.ctl=FusedController(model)
+    engine.ctl.scoring=config['scoring']
+    engine.ctl.reserved_recent=args.reserved_recent
+    engine.ctl.pool_kernel=args.pool_kernel
     for seed in args.seeds:
         random.seed(seed);torch.manual_seed(seed);torch.cuda.manual_seed_all(seed)
         path=dest/f'seed_{seed}.jsonl'

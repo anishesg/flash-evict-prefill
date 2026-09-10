@@ -6,6 +6,7 @@ SRAM accumulator. Query blocks retain their final softmax statistics in SRAM.
 """
 import math
 import torch
+import torch.nn.functional as F
 import triton
 import triton.language as tl
 
@@ -17,7 +18,8 @@ def _prefill(Q, K, V, O, I,
              vb: tl.constexpr, vh: tl.constexpr, vt: tl.constexpr, vd: tl.constexpr,
              H: tl.constexpr, HK: tl.constexpr, N: tl.constexpr, D: tl.constexpr,
              SCALE: tl.constexpr, CAUSAL: tl.constexpr, WEIGHTED: tl.constexpr,
-             SCORE: tl.constexpr, BM: tl.constexpr, BN: tl.constexpr, BD: tl.constexpr):
+             SCORE: tl.constexpr, DECAY: tl.constexpr, WINDOW: tl.constexpr,
+             BM: tl.constexpr, BN: tl.constexpr, BD: tl.constexpr):
     block = tl.program_id(0)
     bh = tl.program_id(1)
     batch, head = bh // H, bh % H
@@ -56,9 +58,13 @@ def _prefill(Q, K, V, O, I,
         maximum = new_maximum
     tl.store(O + ((batch * H + head) * N + rows[:, None]) * D + dims[None, :],
              output / denominator[:, None], (rows[:, None] < N) & (dims[None, :] < D))
-    if SCORE:
+    if SCORE and (block + 1) * BM > N - WINDOW:
         # Recompute each tile using FINAL row normalizers. Summing across rows
         # before this normalization would lose the information needed to fix it.
+        # Weight actual query positions, including a partially overlapping tile.
+        # Earlier query programs still compute their complete attention output.
+        query_weight = tl.exp(DECAY * (rows.to(tl.float32) - (N - 1)))
+        query_weight = tl.where((rows >= N - WINDOW) & (rows < N), query_weight, 0.)
         for start in range(0, end, BN):
             keys = start + cols
             k = tl.load(kbase + dims[:, None] * kd + keys[None, :] * kt,
@@ -68,7 +74,7 @@ def _prefill(Q, K, V, O, I,
             if CAUSAL:
                 valid = valid & (rows[:, None] >= keys[None, :])
             p = tl.exp2(tl.where(valid, logits - maximum[:, None], -float('inf'))) / denominator[:, None]
-            mass = tl.sum(p, 0)
+            mass = tl.sum(p * query_weight[:, None], 0)
             if WEIGHTED:
                 v = tl.load(vbase + keys[:, None] * vt + dims[None, :] * vd,
                             (keys[:, None] < N) & (dims[None, :] < D), other=0)
@@ -94,17 +100,25 @@ def _validate(q, k, v):
 
 
 def prefill(q, k, v, *, causal=True, value_weighted=True, score=True,
-            scale=None, block_q=32, block_k=64):
+            scale=None, block_q=32, block_k=64, recency_decay=0., observation_window=0):
     """Return (attention output, FP32 importance [B, Hkv, N]).
 
-    Importance sums over ALL queries and query heads sharing a KV head:
-      I[b,h,k] = ||V[b,h,k]||_1 * sum_(g,q) softmax(Q K^T)[b,h,g,q,k].
+    Importance sums over queries and query heads sharing a KV head:
+      I[b,h,k] = ||V[b,h,k]||_1 * sum_(g,q) w[q] softmax(Q K^T)[b,h,g,q,k].
+    w[q] = exp(recency_decay * (q - (N-1))), optionally restricted to the
+    last observation_window queries (0 means all). Attention output is unchanged.
+    Window scoring skips replay in earlier query programs, saving QK work.
     With value_weighted=False, return H2O attention mass. No dropout, padding,
     cross-attention, or backward; arbitrary input strides and GQA are supported.
     FP32 atomic reduction order can cause tiny run-to-run differences. score=False
     provides the same attention implementation without replay for ablations.
     """
     _validate(q, k, v)
+    recency_decay = float(recency_decay)
+    if not math.isfinite(recency_decay) or recency_decay < 0:
+        raise ValueError("recency_decay must be finite and nonnegative")
+    if isinstance(observation_window, bool) or not isinstance(observation_window, int) or observation_window < 0:
+        raise ValueError("observation_window must be a nonnegative integer; 0 means all queries")
     if block_q not in (16, 32, 64) or block_k not in (32, 64, 128):
         raise ValueError("Unsupported tile dimensions")
     scale = q.shape[-1] ** -0.5 if scale is None else float(scale)
@@ -117,24 +131,36 @@ def prefill(q, k, v, *, causal=True, value_weighted=True, score=True,
         _prefill[(triton.cdiv(n, block_q), b * h)](
             q, k, v, out, importance, *q.stride(), *k.stride(), *v.stride(),
             h, k.shape[1], n, d, scale * math.log2(math.e), causal, value_weighted,
-            score, block_q, block_k, max(16, triton.next_power_of_2(d)),
+            score, recency_decay, min(n, observation_window or n),
+            block_q, block_k, max(16, triton.next_power_of_2(d)),
             num_warps=4, num_stages=2)
     return out, importance
 
 
-def select_tokens(importance, budget, *, recent=0):
+def select_tokens(importance, budget, *, recent=0, reserved_recent=None, pool_kernel=1):
     """Return chronologically sorted kept indices and a bool KEEP mask.
 
     A separate GPU selection follows the attention kernel's global completion.
     Ties follow torch.topk (unspecified order). recent reserves a suffix inside
     the total budget, useful for quality ablations; default is pure top-k.
+    reserved_recent is an alias for recent. Optional average pooling smooths
+    scores over past-token neighbors, excluding the reserved suffix, as SnapKV.
     """
     n = importance.shape[-1]
+    if reserved_recent is not None:
+        if recent != 0 and recent != reserved_recent:
+            raise ValueError("recent and reserved_recent disagree")
+        recent = reserved_recent
     if isinstance(budget, bool) or not isinstance(budget, int) or not 1 <= budget <= n:
         raise ValueError("budget must be an integer in [1, sequence length]")
-    if not isinstance(recent, int) or not 0 <= recent <= budget:
+    if isinstance(recent, bool) or not isinstance(recent, int) or not 0 <= recent <= budget:
         raise ValueError("recent must be an integer in [0, budget]")
+    if isinstance(pool_kernel, bool) or not isinstance(pool_kernel, int) or pool_kernel < 1 or pool_kernel % 2 != 1:
+        raise ValueError("pool_kernel must be a positive odd integer")
     past = importance[..., :n-recent] if recent else importance
+    if pool_kernel > 1 and budget > recent:
+        past = F.avg_pool1d(past.reshape(-1, 1, past.shape[-1]), pool_kernel,
+                            stride=1, padding=pool_kernel//2).reshape_as(past)
     top = past.topk(budget - recent, dim=-1).indices
     if recent:
         tail = torch.arange(n-recent, n, device=importance.device).expand(*importance.shape[:-1], recent)
@@ -144,10 +170,11 @@ def select_tokens(importance, budget, *, recent=0):
     return indices, keep
 
 
-def evict(q, k, v, budget, *, recent=0, **kwargs):
+def evict(q, k, v, budget, *, recent=0, reserved_recent=None, pool_kernel=1, **kwargs):
     """Return output, importance, kept indices, and bool eviction mask (True=evict)."""
     if kwargs.get("score") is False:
         raise ValueError("evict requires importance scoring")
     output, importance = prefill(q, k, v, **kwargs)
-    indices, keep = select_tokens(importance, budget, recent=recent)
+    indices, keep = select_tokens(importance, budget, recent=recent,
+                                  reserved_recent=reserved_recent, pool_kernel=pool_kernel)
     return output, importance, indices, ~keep

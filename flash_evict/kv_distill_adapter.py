@@ -17,6 +17,9 @@ class FusedController(Controller):
     def __init__(self,model):
         super().__init__(model)
         self.prefill_backend="baseline"
+        self.scoring = {}
+        self.reserved_recent = 0
+        self.pool_kernel = 1
         for attn,_ in self.originals:
             attn.forward=types.MethodType(forward,attn)
 
@@ -29,7 +32,9 @@ class FusedController(Controller):
             math.ceil(prompt_length*float(suffix)) if '.' in suffix else int(suffix))
         budget=max(1,min(budget,prompt_length))
         for state in self.states.values():
-            indices,_=select_tokens(state.pop('importance'),budget)
+            indices,_=select_tokens(state.pop('importance'),budget,
+                                    recent=min(self.reserved_recent,budget),
+                                    pool_kernel=self.pool_kernel)
             state['k']=gather_tokens(state['k'],indices)
             state['v']=gather_tokens(state['v'],indices)
         self.mode='decode'
@@ -56,7 +61,7 @@ def forward(self,hidden_states,attention_mask=None,position_ids=None,
     q,k=apply_rotary_pos_emb(q,k,cos,sin,position_ids)
     if ctl.inference_transform is not None:
         k,v=ctl.inference_transform(self.layer_idx,k,v)
-    out,importance=prefill(q,k,v)
+    out,importance=prefill(q,k,v,**ctl.scoring)
     ctl.states[self.layer_idx]={'k':k,'v':v,'importance':importance}
     out=out.transpose(1,2).contiguous().reshape(b,n,self.hidden_size)
     return self.o_proj(out),None,past_key_value

@@ -100,3 +100,60 @@ def test_long_uniform_analytic(n):
     expected_scores=(v.double().abs().sum(-1)*harmonic*2).float()
     torch.testing.assert_close(out.float(),expected_out.float(),atol=.008,rtol=.008)
     torch.testing.assert_close(scores,expected_scores,atol=.002,rtol=.0003)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='CUDA required')
+@pytest.mark.parametrize('n,decay,window', [
+    (512,.01,0),(1024,.1,0),(4096,1.,0),
+    (137,0.,32),(1024,0.,64),(4096,0.,128),
+    (137,.1,65),(65,1.,128),(1,.1,32),
+])
+@pytest.mark.parametrize('value_weighted',[True,False])
+def test_query_weighted_exact(n,decay,window,value_weighted):
+    q=torch.randn(1,n,4,64,device='cuda',dtype=torch.bfloat16).transpose(1,2)
+    k,v=[torch.randn(1,n,2,64,device='cuda',dtype=q.dtype).transpose(1,2) for _ in range(2)]
+    kwargs=dict(recency_decay=decay,observation_window=window,value_weighted=value_weighted)
+    out,scores=prefill(q,k,v,**kwargs)
+    expected,ref=materialized(q,k,v,**kwargs)
+    torch.testing.assert_close(out.float(),expected,atol=.012,rtol=.006)
+    torch.testing.assert_close(scores,ref,atol=3e-5,rtol=4e-4)
+    plain,_=prefill(q,k,v,score=False)
+    assert torch.equal(out,plain)
+    if not value_weighted:
+        pos=torch.arange(n,device='cuda')
+        weight=(decay*(pos.float()-(n-1))).exp()
+        if window: weight*=pos>=n-window
+        torch.testing.assert_close(scores.sum(-1),weight.sum().expand(1,2)*2,rtol=1e-5,atol=1e-4)
+    budget=min(n,128);recent=min(64,budget)
+    _,keep=select_tokens(scores,budget,reserved_recent=recent)
+    _,reference_keep=select_tokens(ref,budget,reserved_recent=recent)
+    assert torch.equal(keep,reference_keep)
+    assert keep.sum(-1).eq(budget).all() and keep[...,-recent:].all()
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='CUDA required')
+@pytest.mark.parametrize('decay,window',[(.01,0),(0.,128),(.1,65)])
+def test_long_weighted_analytic(decay,window):
+    n=131072
+    q=torch.zeros(1,2,n,16,device='cuda',dtype=torch.bfloat16)
+    k=torch.zeros(1,1,n,16,device='cuda',dtype=q.dtype)
+    v=torch.ones_like(k)
+    _,scores=prefill(q,k,v,recency_decay=decay,observation_window=window)
+    pos=torch.arange(n,device='cuda',dtype=torch.float64)
+    weight=(decay*(pos-(n-1))).exp()
+    if window:weight*=pos>=n-window
+    expected=(weight/(pos+1)).flip(0).cumsum(0).flip(0)*32
+    torch.testing.assert_close(scores[0,0],expected.float(),atol=1e-7,rtol=5e-4)
+
+
+def test_pinning_and_pooling_contract():
+    from flash_evict.baselines import snap_select
+    torch.manual_seed(1)
+    scores=torch.randn(1,3,137)
+    idx,keep=select_tokens(scores,48,reserved_recent=32,pool_kernel=5)
+    expected,expected_keep=snap_select(scores,48,32,5)
+    assert torch.equal(idx,expected) and torch.equal(keep,expected_keep)
+    _,tail=select_tokens(scores,64,reserved_recent=64,pool_kernel=5)
+    assert tail.sum()==3*64 and tail[...,-64:].all()
+    for kwargs in ({'recent':True},{'pool_kernel':2},{'recent':1,'reserved_recent':2}):
+        with pytest.raises(ValueError):select_tokens(scores,64,**kwargs)
